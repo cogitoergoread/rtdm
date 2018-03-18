@@ -1,0 +1,453 @@
+* HortonWorks
+Inertnetes irodalom.
+Download: https://hortonworks.com/downloads/#sandbox
+HDP Getting Started: https://hortonworks.com/tutorial/hadoop-tutorial-getting-started-with-hdp/section/1/
+HDF Getting started: https://hortonworks.com/tutorial/getting-started-with-hdf-sandbox/
+SandBox: https://hortonworks.com/products/sandbox/
+CreditCard demo, HDF 2.4: https://github.com/vakshorton/CreditCardTransactionMonitor
+Tutorial: https://hortonworks.com/tutorial/analyzing-social-media-and-customer-sentiment-with-apache-nifi-and-hdp-search/
+
+** Getting started
+https://hortonworks.com/tutorial/learning-the-ropes-of-the-hortonworks-sandbox/
+
+
+* Docker
+Tutorial: https://docs.docker.com/get-started/
+
+** Első rész
+Docker konténerek listázása
+  docker container ls --all
+
+Docker imagek listázása
+  docker image ls
+
+Docker futtatás új konténert csinált
+  docker run hello-world
+
+  attach      Attach local standard input, output, and error streams to a running container
+  build       Build an image from a Dockerfile
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  exec        Run a command in a running container
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  images      List images
+  import      Import the contents from a tarball to create a filesystem image
+  info        Display system-wide information
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  login       Log in to a Docker registry
+  logout      Log out from a Docker registry
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  ps          List containers
+  pull        Pull an image or a repository from a registry
+  push        Push an image or a repository to a registry
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  run         Run a command in a new container
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  search      Search the Docker Hub for images
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  version     Show the Docker version information
+  wait        Block until one or more containers stop, then print their exit codes
+
+Bash
+  docker run -it ubuntu bash
+
+* HDP
+HDF Component 	URL 	Login Credentials
+Ambari 	http://ip-address:8080 	admin/admin
+Storm UI 	http://ip-address:8744 	not needed
+Superset 	http://ip-address:9089/login 	admin/hortonworks1
+NiFi 	http://ip-address:9090/nifi 	not needed
+Registry 	http://ip-address:7788 	not needed
+Streaming Analytics Manager 	http://ip-address:7777 	not needed
+Sandbox Web Shell Client 	http://ip-address:4200 	root/hadoop
+
+** HDFS műveletek
+https://hortonworks.com/tutorial/manage-files-on-hdfs-via-cli-ambari-files-view/section/1/
+
+su hdfs
+cd
+hdfs dfs -ls /
+
+** Install demo
+https://community.hortonworks.com/articles/38457/credit-fraud-prevention-demo-a-guided-tour.html
+
+** HDP 2.4
+http://sandbox-hdp.hortonworks.com:8080
+ssh root@sandbox-hdp.hortonworks.com -p 2222  root/Kiskacsa1234
+
+
+Ambari: admin/kiskacsa
+
+git clone git@github.com:vakshorton/CreditCardTransactionMonitor.git
+
+Javítások a scriptben...
+ Ori:
+echo "*********************************Preparing HDF Artifacts..."
+cd ~
+git clone https://github.com/vakshorton/CloudBreakArtifacts
+export CONFIG_PATH=~/CloudBreakArtifacts
+cd $ROOT_PATH
+echo "*********************************CONFIG PATH IS: $CONFIG_PATH"
+
+ Jav:
+echo "*********************************Preparing HDF Artifacts..."
+cd ~
+git clone git@github.com:vakshorton/CloudBreakArtifacts.git
+export CONFIG_PATH=~/CloudBreakArtifacts
+cd $ROOT_PATH
+echo "*********************************CONFIG PATH IS: $CONFIG_PATH"
+
+Ez nem megy le:
+waitForServiceToStart HDFS
+
+waitForService () {
+           # Ensure that Service is not in a transitional state
+           SERVICE=$1
+           SERVICE_STATUS=$(curl -u admin:admin -X GET http://$AMBARI_HOST:8080/api/v1/clusters/$CLUSTER_NAME/services/$SERVICE | grep '"state" :' | grep -Po '([A-Z]+)')
+           sleep 2
+           echo "$SERVICE STATUS: $SERVICE_STATUS"
+           LOOPESCAPE="false"
+           if ! [[ "$SERVICE_STATUS" == STARTED || "$SERVICE_STATUS" == INSTALLED ]]; then
+        until [ "$LOOPESCAPE" == true ]; do
+                SERVICE_STATUS=$(curl -u admin:admin -X GET http://$AMBARI_HOST:8080/api/v1/clusters/$CLUSTER_NAME/services/$SERVICE | grep '"state" :' | grep -Po '([A-Z]+)')
+            if [[ "$SERVICE_STATUS" == STARTED || "$SERVICE_STATUS" == INSTALLED ]]; then
+                LOOPESCAPE="true"
+            fi
+            echo "*********************************$SERVICE Status: $SERVICE_STATUS"
+            sleep 2
+        done
+           fi
+}
+
+SERVICE_STATUS=$(curl -u admin:admin -X GET http://$AMBARI_HOST:8080/api/v1/clusters/$CLUSTER_NAME/services/$SERVICE | grep '"state" :' | grep -Po '([A-Z]+)')
+
+Nem futott, kézzel indítottam el.
+
+Nézzük., Ez lement...
+echo "*********************************Install HDF Management Pack..."
+instalHDFManagementPack 
+sleep 2
+
+echo "*********************************Installing Utlities..."
+installUtils
+
+
+
+
+[root@sandbox yum.repos.d]# pwd
+/etc/yum.repos.d
+[root@sandbox yum.repos.d]# cat sandbox.repo 
+
+
+[sandbox]
+baseurl=http://dev2.hortonworks.com.s3.amazonaws.com/repo/dev/master/utils/
+name=Sandbox repository (tutorials)
+gpgcheck=0
+enabled=1
+
+echo "*********************************Installing NIFI..."
+installNifiService
+
+
+
+
+
+installNifiAtlasReporter
+
+NifiAtlasFlowReportingTask]# vim pom.xml
+1.8 - > 1.7
+
+
+Szükséges szolgáltatások
+YARN
+HDFS
+HIVE
+ZOOKEEPER
+NIFI
+KAFKA
+HBASE
+HIVE
+STORM
+
+
+
+mv /etc/yum.repos.d/sandbox.repo /tmp/
+yum install -y vim
+
+vim /etc/yum.repos.d/docker.repo
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+
+git clone git@github.com:vakshorton/CreditCardTransactionMonitor.git
+
+scp -P 2222 /opt/u01/gwork/rtdm/horton/CreditCardTransactionMonitor/install-muszi.sh root@sandbox-hdp.hortonworks.com:/tmp
+
+cp /tmp/install-muszi.sh ./
+chmod +x install-muszi.sh
+
+./install-muszi.sh
+
+** HDF on HDP
+Forrás: https://docs.hortonworks.com/HDPDocuments/HDF3/HDF-3.0.1.1/bk_installing-hdf-and-hdp/content/ch_install-mpack.html
+
+root:
+# Felmásoljuk a csomagot:
+scp -P 2222 /opt/u03/muszi/hdf-ambari-mpack-3.0.0.0-453.tar.gz root@sandbox-hdp.hortonworks.com:/tmp/
+
+# Sandboxon:
+ambari-server install-mpack  --mpack=/tmp/hdf- --verbose
+
+# Config HDF base URL
+HDF Base URL	http://public-repo-1.hortonworks.com/HDF/centos7/3.x/updates/3.0.0.0
+HDF Repo	http://public-repo-1.hortonworks.com/HDF/centos7/3.x/updates/3.0.0.0/hdf.repo
+
+# Help
+root@sandbox-hdp ~]# ambari-server install-mpack --help
+Using python  /usr/bin/python
+Installing management pack
+Usage: ambari-server.py [options] action [stack_id os]
+
+Options:
+  -h, --help            show this help message and exit
+  -f INIT_SCRIPT_FILE, --init-script-file=INIT_SCRIPT_FILE
+                        File with setup script
+  -r DROP_SCRIPT_FILE, --drop-script-file=DROP_SCRIPT_FILE
+                        File with drop script
+  -u UPGRADE_SCRIPT_FILE, --upgrade-script-file=UPGRADE_SCRIPT_FILE
+                        File with upgrade script
+  -t UPGRADE_STACK_SCRIPT_FILE, --upgrade-stack-script-file=UPGRADE_STACK_SCRIPT_FILE
+                        File with stack upgrade script
+  -j JAVA_HOME, --java-home=JAVA_HOME
+                        Use specified java_home.  Must be valid on all hosts
+  -v, --verbose         Print verbose status messages
+  -s, --silent          Silently accepts default prompt values. For db-purge-
+                        history command, silent mode will stop ambari server.
+  -g, --debug           Start ambari-server in debug mode
+  -y, --suspend-start   Freeze ambari-server Java process at startup in debug
+                        mode
+  --all                 LDAP sync all option.  Synchronize all LDAP users and
+                        groups.
+  --existing            LDAP sync existing option.  Synchronize existing
+                        Ambari users and groups only.
+  --users=LDAP_SYNC_USERS
+                        LDAP sync users option. Specifies the path to a CSV
+                        file of user names to be synchronized.
+  --groups=LDAP_SYNC_GROUPS
+                        LDAP sync groups option.  Specifies the path to a CSV
+                        file of group names to be synchronized.
+  --database=DBMS       Database to use
+                        embedded|oracle|mysql|mssql|postgres|sqlanywhere
+  --databasehost=DATABASE_HOST
+                        Hostname of database server
+  --databaseport=DATABASE_PORT
+                        Database port
+  --databasename=DATABASE_NAME
+                        Database/Service name or ServiceID
+  --postgresschema=POSTGRES_SCHEMA
+                        Postgres database schema name
+  --databaseusername=DATABASE_USERNAME
+                        Database user login
+  --databasepassword=DATABASE_PASSWORD
+                        Database user password
+  --sidorsname=SID_OR_SNAME
+                        Oracle database identifier type, Service ID/Service
+                        Name sid|sname
+  --sqla-server-name=SQLA_SERVER_NAME
+                        SQL Anywhere server name
+  --jdbc-driver=JDBC_DRIVER
+                        Specifies the path to the JDBC driver JAR file or
+                        archive with all required files(jdbc jar, libraries
+                        and etc), for the database type specified with the
+                        --jdbc-db option. Used only with --jdbc-db option.
+                        Archive is supported only for sqlanywhere database.
+  --jdbc-db=JDBC_DB     Specifies the database type
+                        [postgres|mysql|mssql|oracle|hsqldb|sqlanywhere] for
+                        the JDBC driver specified with the --jdbc-driver
+                        option. Used only with --jdbc-driver option.
+  --cluster-name=CLUSTER_NAME
+                        Cluster name
+  --version-display-name=DESIRED_REPO_VERSION
+                        Display name of desired repo version
+  --skip-properties-validation
+                        Skip properties file validation
+  --skip-database-check
+                        Skip database consistency check
+  --skip-view-extraction
+                        Skip extraction of system views
+  --auto-fix-database   Automatically fix database consistency issues
+  --enable-lzo-under-gpl-license
+                        Automatically accepts GPL license
+  --force-version       Force version to current
+  --version=STACK_VERSIONS
+                        Specify stack version that needs to be enabled. All
+                        other stacks versions will be disabled
+  --stack=STACK_NAME    Specify stack name for the stack versions that needs
+                        to be enabled
+  -d PURGE_FROM_DATE, --from-date=PURGE_FROM_DATE
+                        Specify date for the database purge process in 'yyyy-
+                        MM-dd' format
+  --mpack=MPACK_PATH    Specify the path for management pack to be
+                        installed/upgraded
+  --mpack-name=MPACK_NAME
+                        Specify the management pack name to be uninstalled
+  --purge               Purge existing resources specified in purge-list
+  --purge-list=PURGE_LIST
+                        Comma separated list of resources to purge (stack-
+                        definitions,service-definitions,mpacks). By default
+                        (stack-definitions,mpacks) will be purged.
+  --force               Force install management pack
+  --ldap-url=LDAP_URL   Primary url for LDAP
+  --ldap-secondary-url=LDAP_SECONDARY_URL
+                        Secondary url for LDAP
+  --ldap-ssl=LDAP_SSL   Use SSL [true/false] for LDAP
+  --ldap-user-class=LDAP_USER_CLASS
+                        User Attribute Object Class for LDAP
+  --ldap-user-attr=LDAP_USER_ATTR
+                        User Attribute Name for LDAP
+  --ldap-group-class=LDAP_GROUP_CLASS
+                        Group Attribute Object Class for LDAP
+  --ldap-group-attr=LDAP_GROUP_ATTR
+                        Group Attribute Name for LDAP
+  --ldap-member-attr=LDAP_MEMBER_ATTR
+                        Group Membership Attribute Name for LDAP
+  --ldap-dn=LDAP_DN     Distinguished name attribute for LDAP
+  --ldap-base-dn=LDAP_BASE_DN
+                        Base DN for LDAP
+  --ldap-manager-dn=LDAP_MANAGER_DN
+                        Manager DN for LDAP
+  --ldap-manager-password=LDAP_MANAGER_PASSWORD
+                        Manager Password For LDAP
+  --ldap-save-settings  Save without review for LDAP
+  --ldap-referral=LDAP_REFERRAL
+                        Referral method [follow/ignore] for LDAP
+  --ldap-bind-anonym=LDAP_BIND_ANONYM
+                        Bind anonymously [true/false] for LDAP
+  --ldap-sync-admin-name=LDAP_SYNC_ADMIN_NAME
+                        Username for LDAP sync
+  --ldap-sync-admin-password=LDAP_SYNC_ADMIN_PASSWORD
+                        Password for LDAP sync
+  --ldap-sync-username-collisions-behavior=LDAP_SYNC_USERNAME_COLLISIONS_BEHAVIOR
+                        Handling behavior for username collisions
+                        [convert/skip] for LDAP sync
+  --pam-config-file=PAM_CONFIG_FILE
+                        Path to the PAM configuration file
+  --pam-auto-create-groups=PAM_AUTO_CREATE_GROUPS
+                        Automatically create groups for authenticated users
+                        [true/false]
+  --truststore-type=TRUST_STORE_TYPE
+                        Type of TrustStore (jks|jceks|pkcs12)
+  --truststore-path=TRUST_STORE_PATH
+                        Path of TrustStore
+  --truststore-password=TRUST_STORE_PASSWORD
+                        Password for TrustStore
+  --truststore-reconfigure
+                        Force to reconfigure TrustStore if exits
+  --security-option=SECURITY_OPTION
+                        Setup security option (setup-https|encrypt-password
+                        |setup-kerberos-jaas|setup-truststore|import-
+                        certificate)
+  --api-ssl=API_SSL     Enable SSL for Ambari API [true/false]
+  --api-ssl-port=API_SSL_PORT
+                        Client API SSL port
+  --import-cert-path=IMPORT_CERT_PATH
+                        Path to Certificate (import)
+  --import-cert-alias=IMPORT_CERT_ALIAS
+                        Alias for the imported certificate
+  --import-key-path=IMPORT_KEY_PATH
+                        Path to Private Key (import)
+  --pem-password=PEM_PASSWORD
+                        Password for Private Key
+  --master-key=MASTER_KEY
+                        Master key for encrypting passwords
+  --master-key-persist=MASTER_KEY_PERSIST
+                        Persist master key [true/false]
+  --jaas-principal=JAAS_PRINCIPAL
+                        Kerberos principal for ambari server
+  --jaas-keytab=JAAS_KEYTAB
+                        Keytab path for Kerberos principal
+  --kerberos-setup=KERBEROS_SETUP
+                        Setup Kerberos Authentication
+  --kerberos-enabled=KERBEROS_ENABLED
+                        Kerberos enabled
+  --kerberos-spnego-principal=KERBEROS_SPNEGO_PRINCIPAL
+                        Kerberos SPNEGO principal
+  --kerberos-spnego-keytab-file=KERBEROS_SPNEGO_KEYTAB_FILE
+                        Kerberos SPNEGO keytab file
+  --kerberos-spnego-user-types=KERBEROS_USER_TYPES
+                        User type search order (comma-delimited)
+  --kerberos-auth-to-local-rules=KERBEROS_AUTH_TO_LOCAL_RULES
+                        Auth-to-local rules
+
+** Install NiFi
+cd /var/local
+mkdir nifi
+tar xvf nifi*
+nifi.sh install
+service nifi start
+
+* HDF
+** NiFi
+https://hortonworks.com/tutorial/analyze-transit-patterns-with-apache-nifi/section/5/
+
+API key, Google
+https://developers.google.com/places/web-service/get-api-key
+ AIzaSyDebi_pHwaXDABwGJEyUechIkJEqaeNyoQ 
+
+https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${Latitude},${Longitude}&radius=500&type=neighborhood&key=AIzaSyDebi_pHwaXDABwGJEyUechIkJEqaeNyoQ
+
+* HDP from scrath
+** Virtual
+RAM: 8192; 4 CPU; 
+8 M Video; 
+Virtual HDD: 48 G; real: 17G
+
+** Centos 7
+overlay fs... 
+
+Users: splash hive storm zookeeper infra-solr oozie atlas falcon ranger tez zeppelin livy spark ambari-qa flume kafka hdfs sqoop yarn mapred hbase knox hcat exim rpc slider rpcuser nfsnobody apache hue admin kms xapolicymgr it1 legal1 mktg1 network1 it2 legal2 mktg2 network2 it3 legal3 mktg3 network3 guest amy_ds holger_gov maria_dev raj_ops shellinabox unit
+
+
+* Banki demo
+** NiFi
+
+${routingTarget:equals('CustomerTransactionValidation')}
+
+*** Listen HTTP
+contentListener
+8082
+
+*** GetSQS
+Valami AWS csoda
+https://community.hortonworks.com/articles/49467/integrating-apache-nifi-with-aws-s3-and-sqs.html
+
+
+*** Put HTTP
+http://gcm-http.googleapis.com/gcm/send
+
+*** Put Kafka
+sandbox.hortonworks.com:6667
+CustomerTransactionValidation
+IncomingTransactions
+
+

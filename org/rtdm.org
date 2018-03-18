@@ -1,0 +1,177 @@
+* RTDM
+** Tranzakció generátor
+*** Tranzakció
+ accountNumber;
+ accountType;
+ merchantId;
+ merchantType;
+ transactionId;
+ amount;
+ currency;
+ isCardPresent;
+ latitude;
+ longitude;
+ ipAddress;
+ transactionTimeStamp;
+
+*** Merchant
+String merchantId;
+String merchantType;
+GeoPoint location;
+** Fájlok HDFS-re
+su hdfs
+cd
+
+hdfs dfs -mkdir /demo/rtdm
+hdfs dfs -mkdir /demo/rtdm/data
+
+# Host to Sandbox
+scp -P 2222 *.csv  root@sandbox-hdp.hortonworks.com:/tmp/
+
+# Sandbox to HDFS
+hdfs dfs -put /tmp/*.csv /demo/rtdm/data
+hdfs dfs -ls /demo/rtdm/data
+
+# Sandboxon saját helyre inkább, HDFS nem trivi...
+mkdir /var/local/rtdm
+mkdir /var/local/rtdm/data
+cp /tmp/cards.csv /tmp/customer.csv /tmp/transactions.csv  /var/local/rtdm/data/
+chmod 777 /var/local/rtdm/ /var/local/rtdm/data/
+chmod 666 /var/local/rtdm/data/*.csv
+ls -al /var/local/rtdm/data/
+mkdir /var/local/rtdm/output
+chmod 777 /var/local/rtdm/output
+** NiFi Flow, fájl feldolgozás
+Generate Card Transaction data via Data Seed based on Card API
+GetFile, Input Directory, Keep Source File
+Control Rate, Rate Control: flowfile count, Maximum Rate, Time Duration
+UpdateAttribute, filename: transaction-data-${UUID()}.xml
+PutFile Directory
+Output Port, RawCardTransactions
+
+
+*** Update Attr
+filename: transactions-${uuid}.csv
+schema.name: transaction
+
+*** Service Config, AVRO Schema
+https://community.hortonworks.com/articles/147198/using-apache-nifi-to-validate-records-adhere-to-a.html
+https://avro.apache.org/docs/1.8.1/spec.html
+https://blogs.apache.org/nifi/entry/record-oriented-data-with-nifi
+https://nifi.apache.org/docs.html
+**** Példa
+{
+  "name": "recordFormatName",
+  "namespace": "nifi.examples",
+  "type": "record",
+  "fields": [
+    { "name": "id", "type": "int" },
+    { "name": "firstName", "type": "string" },
+    { "name": "lastName", "type": "string" },
+    { "name": "email", "type": "string" },
+    { "name": "gender", "type": "string" }
+  ]
+}
+**** Első próba
+{
+  "name": "transactionRecord",
+  "type": "record",
+  "fields": [
+    { "name": "idx", "type": "int" },
+    { "name": "accountNumber", "type": "string" },
+    { "name": "accountType", "type": "string" },
+    { "name": "merchantId", "type": "int" },
+    { "name": "merchantType", "type": "string" },
+    { "name": "transactionId", "type": "long" },
+    { "name": "amount", "type": "int" },
+    { "name": "currency", "type": "string" },
+    { "name": "isCardPresent", "type": "string" },
+    { "name": "latitude", "type": "float" },
+    { "name": "longitude", "type": "float" },
+    { "name": "ipAddress", "type": "string" },
+    { "name": "transactionTimeStamp", "type": "float" }
+  ]
+}
+
+ParseBigDecimal, ParseBool, ParseChar, ParseDate, ParseDouble, ParseInt, ParseLong, Optional, DMinMax, Equals, ForbidSubStr, LMinMax, NotNull, Null, RequireHashCode, RequireSubStr, Strlen, StrMinMax, StrNotNullOrEmpty, 
+
+ParseInt,StrNotNullOrEmpty,StrNotNullOrEmpty,ParseInt,StrNotNullOrEmpty,ParseBigDecimal,ParseInt,StrNotNullOrEmpty,StrNotNullOrEmpty,ParseDouble,ParseDouble,Null,ParseDouble
+
+**** Második próba
+{
+  "name": "transactionRecord",
+  "type": "record",
+  "fields": [
+    { "name": "idx", "type": "long" },
+    { "name": "accountNumber", "type": "string" },
+    { "name": "accountType", "type": "string" },
+    { "name": "merchantId", "type": "string" },
+    { "name": "merchantType", "type": "string" },
+    { "name": "transactionId", "type": "string" },
+    { "name": "amount", "type": "string" },
+    { "name": "currency", "type": "string" },
+    { "name": "isCardPresent", "type": "string" },
+    { "name": "latitude", "type": "string" },
+    { "name": "stringitude", "type": "string" },
+    { "name": "ipAddress", "type": ["null", "string"] },
+    { "name": "transactionTimeStamp", "type": "string" }
+  ]
+}
+
+
+*** Sima NiFi fájl feldolgozás
+Azért, hogy ne egyszerűbb legyen, kevés rekordot kap:
+cat nifi/work/transactions.csv | head > nifi/data/transactions.csv
+
+
+
+* Doksik
+** CSV to JSON
+Első cikk: https://community.hortonworks.com/articles/115311/convert-csv-to-json-avro-xml-using-convertrecord-p.html
+RandomUser, jó... https://randomuser.me/
+
+*** Update Attribute
+schema.name: users
+
+*** AvroSchemaRegistry
+{
+  "type": "record",
+  "name": "UserRecord",
+  "fields" : [
+    {"name": "id", "type": "long"},
+    {"name": "title", "type": ["null", "string"]},
+    {"name": "first", "type": ["null", "string"]},
+    {"name": "last", "type": ["null", "string"]},
+    {"name": "street", "type": ["null", "string"]},
+    {"name": "city", "type": ["null", "string"]},
+    {"name": "state", "type": ["null", "string"]},
+    {"name": "zip", "type": ["null", "string"]},
+    {"name": "gender", "type": ["null", "string"]},
+    {"name": "email", "type": ["null", "string"]},
+    {"name": "username", "type": ["null", "string"]},
+    {"name": "password", "type": ["null", "string"]},
+    {"name": "phone", "type": ["null", "string"]},
+    {"name": "cell", "type": ["null", "string"]},
+    {"name": "ssn", "type": ["null", "string"]},
+    {"name": "date_of_birth", "type": ["null", "string"]},
+    {"name": "reg_date", "type": ["null", "string"]},
+    {"name": "large", "type": ["null", "string"]},
+    {"name": "medium", "type": ["null", "string"]},
+    {"name": "thumbnail", "type": ["null", "string"]},
+    {"name": "version", "type": ["null", "string"]},
+    {"name": "nationality", "type": ["null", "string"]}
+  ]
+}
+*** CSV Reader
+Schema Access Strategy: Use 'Schema Name' property
+Schema Registry: AvroSchema Registry
+Schema name:${schema.name}
+Schema Text:${avro.schema}
+Csv Format: Custom format
+Value Separator:;
+Treat First Line as Header: true
+
+*** JsonRecordSetWriter
+Schema Write Strategy: Set 'schema.name' Attribute
+Schema Access Strategy: Use 'Schema Name' property
+Schema Registry, Name, text...
