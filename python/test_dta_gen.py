@@ -152,9 +152,10 @@ def create_test_transactions(nr_trips, nr_unknown):
     """
     Véletlen tranzakcis adatokat generál.
     Trip, néhány vásárlást érintő útvonal, random hosszú.
-    UnKnown: véletlen ártyaszám.
+    UnKnown: véletlen kártyaszám.
     DataFrame, kiírja CSV fájlba.
     """
+    import csv
     trans_list = list()
     # Tranzakciók az ügyfelekre
     for i in range(nr_trips):
@@ -181,7 +182,13 @@ def create_test_transactions(nr_trips, nr_unknown):
           'transactionId', 'amount', 'currency', 'isCardPresent',
           'latitude', 'longitude', 'ipAddress', 'transactionTimeStamp']]
         .sort_values('transactionTimeStamp'))
-    trans_df.to_csv('transactions.csv')
+    # trans_df.to_csv('transactions.csv')
+    trans_df.to_csv('transactions.csv',
+                    sep=';',
+                    header=False,
+                    index_label='idx',
+                    encoding='UTF-8',
+                    quoting=csv.QUOTE_ALL)
     return trans_df
 
 create_test_transactions(200,20)
