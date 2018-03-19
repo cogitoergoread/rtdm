@@ -175,3 +175,6 @@ Treat First Line as Header: true
 Schema Write Strategy: Set 'schema.name' Attribute
 Schema Access Strategy: Use 'Schema Name' property
 Schema Registry, Name, text...
+
+* Clipboard
+https://stackoverflow.com/questions/45172345/nifi-splitjson-and-executesql
