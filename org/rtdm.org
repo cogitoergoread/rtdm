@@ -215,3 +215,27 @@ data.to_sql(name='sample_table2', con=engine, if_exists = 'append', index=False)
 
 * Clipboard
 https://stackoverflow.com/questions/45172345/nifi-splitjson-and-executesql
+
+** Database Extract with NiFi
+https://www.batchiq.com/database-extract-with-nifi.html
+Van logolás is.
+
+** Extract JSON to attribute
+https://community.hortonworks.com/questions/154195/nifi-extract-attributes-from-json-as-argument-in-i.html
+
+Evaluate JSON Path
+
+** SQL összerakása Attributum alapján
+
+https://community.hortonworks.com/questions/110791/nifi-processor-to-dynamically-create-sql-query-fro.html
+
+Evaluate JSON Path + Execute Query
+
+** NiFI linkek
+https://github.com/jfrazee/awesome-nifi
+
+** Python példa
+https://community.hortonworks.com/articles/35568/python-script-in-nifi.html
+
+https://gist.github.com/ijokarumawak/1df6d34cd1b2861eb6b7432ee7245ccd
+
