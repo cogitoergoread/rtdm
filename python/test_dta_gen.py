@@ -4,12 +4,16 @@
 Created on Thu Mar 15 10:41:30 2018
 
 @author: muszi
+
+Create test Data for Real Time Decisioning Model
 """
 
 import random
 import pandas as pd
 import numpy as np
 import datetime as dt
+
+random.seed(8128)
 
 # Dict of Dict, Külső kategóriák, belső: tranzakció értékek
 merchant_category = {
@@ -116,6 +120,18 @@ def create_test_card(cust, nr_cards_over_one):
     cards.to_csv('cards.csv')
     return cards
 
+
+def write_static_db(cust, card):
+    """
+    Writes the Customer and Card DataFrames to MySQL Db
+    """
+    import mysql.connector
+    from sqlalchemy import create_engine
+    db_connection = 'mysql+mysqlconnector://rtdm:rtdm123Kecske@localhost:3306/rtdm'
+    engine = create_engine(db_connection, echo=False, encoding='utf-8')
+    cust.reset_index().to_sql(name='customer', con=engine, if_exists = 'replace', index=False)
+    card.reset_index().to_sql(name='bank_card', con=engine, if_exists = 'replace', index=False)
+
 # Params
 simulation_start = "2018.04.01 08:00:00"
 epoch=dt.datetime.fromtimestamp(0)
@@ -124,7 +140,9 @@ simualtion_stamp = ( dt.datetime.strptime(simulation_start.strip(),
 trip_delta = 5      # 5 percenként vásárol
 cust = create_test_customers(nr_of_cust=300)
 card = create_test_card(cust, nr_cards_over_one=200)
+write_static_db(cust, card)
 trans_id_start = 5382367345
+
 
 def get_random_trans(cardNumber, cardType, trans_date):
     global trans_id_start

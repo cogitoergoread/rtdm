@@ -176,5 +176,42 @@ Schema Write Strategy: Set 'schema.name' Attribute
 Schema Access Strategy: Use 'Schema Name' property
 Schema Registry, Name, text...
 
+* MySQL
+** Install: Digital Ocean
+https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-16-04
+
+sudo apt update
+sudo apt install mysql-server
+mysql_secure_installation
+Root: Kiskacsa123
+
+systemctl status mysql.service
+
+mysqladmin -p -u root version
+
+** Create Db
+https://www.digitalocean.com/community/tutorials/how-to-create-a-new-user-and-grant-permissions-in-mysql
+
+mysql -p -u root 
+
+CREATE USER 'rtdm'@'localhost' IDENTIFIED BY 'rtdm123Kecske';
+CREATE DATABASE rtdm CHARACTER SET utf8 COLLATE utf8_general_ci;
+GRANT ALL PRIVILEGES ON rtdm.* TO rtdm@localhost;
+FLUSH PRIVILEGES;
+
+SELECT DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME
+FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'rtdm';
+** Write DataFrame to MySQL
+https://stackoverflow.com/questions/30631325/writing-to-mysql-database-with-pandas-using-sqlalchemy-to-sql
+
+
+import pandas as pd
+import mysql.connector
+from sqlalchemy import create_engine
+
+engine = create_engine('mysql+mysqlconnector://[user]:[pass]@[host]:[port]/[schema]', echo=False)
+data.to_sql(name='sample_table2', con=engine, if_exists = 'append', index=False)
+
+
 * Clipboard
 https://stackoverflow.com/questions/45172345/nifi-splitjson-and-executesql
