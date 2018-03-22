@@ -230,6 +230,7 @@ Evaluate JSON Path
 https://community.hortonworks.com/questions/110791/nifi-processor-to-dynamically-create-sql-query-fro.html
 
 Evaluate JSON Path + Execute Query
+$.[0].accountNumber
 
 ** NiFI linkek
 https://github.com/jfrazee/awesome-nifi
@@ -240,7 +241,7 @@ https://community.hortonworks.com/articles/35568/python-script-in-nifi.html
 https://gist.github.com/ijokarumawak/1df6d34cd1b2861eb6b7432ee7245ccd
 
 ** GUI modeler integration
-Nagyj·bÛl nincs...
+Nagyj√°b√≥l nincs...
 https://docs.microsoft.com/en-us/machine-learning-server/python-reference/microsoftml/rx-predict
 PMML
 https://marketplace.rapidminer.com/UpdateServer/faces/product_details.xhtml?productId=rmx_pmml
