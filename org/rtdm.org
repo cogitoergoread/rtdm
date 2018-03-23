@@ -227,10 +227,32 @@ Evaluate JSON Path
 
 ** SQL összerakása Attributum alapján
 
-https://community.hortonworks.com/questions/110791/nifi-processor-to-dynamically-create-sql-query-fro.html
+ https://community.hortonworks.com/questions/110791/nifi-processor-to-dynamically-create-sql-query-fro.html
 
 Evaluate JSON Path + Execute Query
 $.[0].accountNumber
+
+DBCP hogyan:
+https://community.hortonworks.com/questions/75767/how-to-configure-and-connect-mysql-with-nifi-and-p.html
+
+sudo apt install libmysql-java
+/usr/share/java/mysql.jar
+
+    SELECT	
+    		'${ID}' as ID
+    		,'${DeviceID}' as DeviceID
+    		,'${LogDate}' as LogDate
+    		,'${Latitude}' as Latitude
+    		,'${Longitude}' as Longitude
+    		,'OK' as OK
+    FROM	[Device] 
+    WHERE	DeviceID = '${DeviceID}'
+
+*** AVRO to JSON
+{"type":"record",
+"name":"NiFi_ExecuteSQL_Record",
+"namespace":"any.data",
+"fields":[{"name":"Account","type":["null","string"]}]}
 
 ** NiFI linkek
 https://github.com/jfrazee/awesome-nifi
@@ -245,3 +267,9 @@ Nagyjából nincs...
 https://docs.microsoft.com/en-us/machine-learning-server/python-reference/microsoftml/rx-predict
 PMML
 https://marketplace.rapidminer.com/UpdateServer/faces/product_details.xhtml?productId=rmx_pmml
+* GIT
+** MCH
+ muszi@ns.macrohard.hu:/home/muszi/git/kurt.git
+
+** Github
+git@github.com:cogitoergoread/rtdm.git
