@@ -273,3 +273,9 @@ https://marketplace.rapidminer.com/UpdateServer/faces/product_details.xhtml?prod
 
 ** Github
 git@github.com:cogitoergoread/rtdm.git
+** Move repo
+git clone --bare   muszi@ns.macrohard.hu:/home/muszi/git/rtdm.git
+cd rtdm.git
+git push --mirror git@github.com:cogitoergoread/rtdm.git
+
+git clone  git@github.com:cogitoergoread/rtdm.git
