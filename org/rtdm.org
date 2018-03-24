@@ -125,6 +125,12 @@ cat nifi/work/transactions.csv | head > nifi/data/transactions.csv
 
 
 
+*** Execute SQL
+SELECT * from bank_card WHERE Card = '${accountNumber}';
+
+
+
+
 * Doksik
 ** CSV to JSON
 Első cikk: https://community.hortonworks.com/articles/115311/convert-csv-to-json-avro-xml-using-convertrecord-p.html
@@ -212,6 +218,15 @@ from sqlalchemy import create_engine
 engine = create_engine('mysql+mysqlconnector://[user]:[pass]@[host]:[port]/[schema]', echo=False)
 data.to_sql(name='sample_table2', con=engine, if_exists = 'append', index=False)
 
+Primary key:
+https://stackoverflow.com/questions/30867390/python-pandas-to-sql-how-to-create-a-table-with-a-primary-key
+
+DataType:
+http://docs.sqlalchemy.org/en/latest/core/type_basics.html
+** Avro Python install
+http://avro.apache.org/docs/current/gettingstartedpython.html
+tar xvfz avro-python3-1.8.2.tar.gz
+python setup.py install
 
 * Clipboard
 https://stackoverflow.com/questions/45172345/nifi-splitjson-and-executesql

@@ -1,0 +1,28 @@
+id,category,lat,long,name
+1001,élelmiszer,47.4993318,19.0237523,CBA Déli
+1002,élelmiszer,47.50098,19.0593837,Spar Király
+1003,élelmiszer,47.4937711,19.0564734,Aldi Kossuth
+1010,étterem,47.5050979,19.0504007,Tüköry
+1011,étterem,47.4861163,19.0647328,Kaltenberg
+1012,étterem,47.5098377,19.0981019,Wang mester
+1020,ruházat,7.5132144,19.0568654,Berhska WE
+1021,ruházat,47.5024646,19.1347594,TomTailor ÁR
+1022,ruházat,47.511583,19.035859,Trapper Fő
+1030,egészség,47.5065185,19.1019453,Egressy Patika
+1031,egészség,47.4999491,19.0571779,Best Dental
+1032,egészség,47.510766,19.0513418,Életerő mozgás
+1040,elektronikai,47.4983895,19.0913913,MediaMarkt ARE
+1041,elektronikai,47.4955751,19.0689243,Mérkabolt Józ
+1042,elektronikai,47.517732,19.141521,HiFi Station
+1050,üzemanyag,47.5135858,19.1208947,MOL Róna
+1051,üzemanyag,47.50853,19.0997001,OMV Hun
+1052,üzemanyag,47.558184,19.07439,Shell Váci
+1060,szórakozás,47.5031823,19.0621811,ZAK
+1061,szórakozás,47.4936625,19.0526852,Katona
+1062,szórakozás,47.4771073,19.0602603,A38
+1070,könyv,47.5042391,19.0599304,Írók boltja
+1071,könyv,47.5085084,19.0194369,TypoTex
+1072,könyv,47.496119,19.066945,Libri Blaha
+1080,utazás,47.499512,19.053063,Vista Andr
+1081,utazás,47.492694,19.053128,IBUSZ Feren
+1082,utazás,47.49721,19.0488859,Neckermann Vörö

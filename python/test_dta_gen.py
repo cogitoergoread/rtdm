@@ -60,6 +60,20 @@ merchants = {
                       {'id' : 1081, 'name' : "IBUSZ Feren", 'lat' :47.492694 , 'long' : 19.053128},
                       {'id' : 1082, 'name' : "Neckermann Vörö", 'lat' : 47.49721, 'long' : 19.0488859}]}
 
+def generate_merchants_df():
+    """
+    Returns a DataFrame containing the merchants dict
+    """
+    mlist = list()
+    for key, values in merchants.items():
+        for merch in values:
+            merch['category'] = key
+            mlist.append(merch)
+    merch = pd.DataFrame(mlist)
+    merch.set_index('id', inplace=True)
+    merch.to_csv("merchant.csv")
+    return merch
+            
 
 def generate_random_name(gender):
     first_name_wmn = ['Hanna', 'Anna', 'Jázmin', 'Nóra', 'Boglárka', 'Zsófia', 'Lili', 'Réka', 'Dóra', 'Luca', 'Viktória', 'Emma', 'Vivien', 'Laura', 'Eszter', 'Fanni', 'Petra', 'Lilla', 'Csenge', 'Noémi', 'Sára', 'Dorina', 'Gréta', 'Zoé', 'Dorka', 'Rebeka', 'Bianka', 'Flóra', 'Léna', 'Panna', 'Lara', 'Maja', 'Kamilla', 'Szonja', 'Fruzsina', 'Virág', 'Blanka', 'Kinga', 'Ramóna', 'Kitti', 'Tímea', 'Janka', 'Kata', 'Júlia', 'Dorottya', 'Emese', 'Vanessza', 'Izabella', 'Mira', 'Nikolett', 'Liza', 'Veronika', 'Tamara', 'Alíz', 'Emília', 'Lilien', 'Kira', 'Adrienn', 'Amanda', 'Borbála', 'Leila', 'Kincső', 'Adél', 'Zselyke', 'Diána', 'Natália', 'Melissza', 'Abigél']
@@ -121,17 +135,41 @@ def create_test_card(cust, nr_cards_over_one):
     return cards
 
 
-def write_static_db(cust, card):
+def write_static_db(cust, card, merch):
     """
     Writes the Customer and Card DataFrames to MySQL Db
     """
     import mysql.connector
     from sqlalchemy import create_engine
+    from sqlalchemy.types import Float, String, BigInteger, Integer
     db_connection = 'mysql+mysqlconnector://rtdm:rtdm123Kecske@localhost:3306/rtdm'
     engine = create_engine(db_connection, echo=False, encoding='utf-8')
-    cust.reset_index().to_sql(name='customer', con=engine, if_exists = 'replace', index=False)
-    card.reset_index().to_sql(name='bank_card', con=engine, if_exists = 'replace', index=False)
-
+    cust.reset_index().to_sql(name='customer', 
+                    con=engine,
+                    dtype={'Account' : BigInteger, 'Age' : Integer,
+                           'Gender' : String(1), 'Name' : String(50),
+                           'Tel' : String(20)},
+                    if_exists = 'replace', 
+                    index=False)
+    card.reset_index().to_sql(name='bank_card',
+                    con=engine,
+                    dtype={'Card' : String(20), 'Account' : BigInteger,
+                           'Type' : String(21)},
+                    if_exists = 'replace',
+                    index=False)
+    merch.reset_index().to_sql(name='merchant',
+                     con=engine,
+                     dtype={'id': Integer, 'name' : String(30),
+                            'type' : String(20), 'long' : Float,
+                            'lat' : Float, 'category': String(20)},
+                     if_exists = 'replace',
+                     index=False)
+    # Create Primary keys
+    with engine.connect() as con:
+        con.execute('ALTER TABLE bank_card ADD PRIMARY KEY (Card);')
+        con.execute('ALTER TABLE customer ADD PRIMARY KEY (Account);')
+        con.execute('ALTER TABLE merchant ADD PRIMARY KEY (id);')
+    
 # Params
 simulation_start = "2018.04.01 08:00:00"
 epoch=dt.datetime.fromtimestamp(0)
@@ -140,7 +178,8 @@ simualtion_stamp = ( dt.datetime.strptime(simulation_start.strip(),
 trip_delta = 5      # 5 percenként vásárol
 cust = create_test_customers(nr_of_cust=300)
 card = create_test_card(cust, nr_cards_over_one=200)
-write_static_db(cust, card)
+merch = generate_merchants_df()
+write_static_db(cust, card, merch)
 trans_id_start = 5382367345
 
 
