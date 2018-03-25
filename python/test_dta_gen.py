@@ -199,9 +199,6 @@ def get_random_trans(cardNumber, cardType, trans_date):
             'amount' : random.randrange(randmerchcat['min_value'],randmerchcat['max_value']),
             'currency' : 'HUF',
             'isCardPresent' : "True",
-            'latitude' : merchant['lat'],
-            'longitude' : merchant['long'],
-            'ipAddress' : "",
             'transactionTimeStamp' : trans_date}
 
 
@@ -237,7 +234,7 @@ def create_test_transactions(nr_trips, nr_unknown):
     trans_df = (pd.DataFrame(trans_list)
         [['accountNumber', 'accountType', 'merchantId', 'merchantType', 
           'transactionId', 'amount', 'currency', 'isCardPresent',
-          'latitude', 'longitude', 'ipAddress', 'transactionTimeStamp']]
+          'transactionTimeStamp']]
         .sort_values('transactionTimeStamp'))
     # trans_df.to_csv('transactions.csv')
     trans_df.to_csv('transactions.csv',

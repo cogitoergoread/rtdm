@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <template encoding-version="1.2">
-    <description>Működő CSV értelmező, JSON konv</description>
+    <description>Rövidebb Teransaction rekord.
+Fájl feldolgozás Ok.</description>
     <groupId>395e2e35-0162-1000-8f8f-00979cb3245d</groupId>
-    <name>CSV_Ert_Mux</name>
+    <name>CSV_Ert_Mux2</name>
     <snippet>
         <labels>
-            <id>9f211727-28c8-3843-0000-000000000000</id>
+            <id>12f66c31-2e31-3780-0000-000000000000</id>
             <parentGroupId>7e6f2fbd-ccf2-30d4-0000-000000000000</parentGroupId>
             <position>
                 <x>0.0</x>
@@ -23,7 +24,7 @@ via Data Seed based on Card API</label>
             <width>479.841796875</width>
         </labels>
         <processGroups>
-            <id>f170aea0-1407-3a83-0000-000000000000</id>
+            <id>8ea9ed5d-3ea6-39c8-0000-000000000000</id>
             <parentGroupId>7e6f2fbd-ccf2-30d4-0000-000000000000</parentGroupId>
             <position>
                 <x>32.12516874861444</x>
@@ -32,13 +33,34 @@ via Data Seed based on Card API</label>
             <comments></comments>
             <contents>
                 <connections>
-                    <id>c5a83835-f543-315a-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
+                    <id>a00e2e79-dced-3993-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
                     <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
                     <backPressureObjectThreshold>10000</backPressureObjectThreshold>
                     <destination>
-                        <groupId>f170aea0-1407-3a83-0000-000000000000</groupId>
-                        <id>6c5d32a3-07cf-385d-0000-000000000000</id>
+                        <groupId>8ea9ed5d-3ea6-39c8-0000-000000000000</groupId>
+                        <id>79f7b6ba-8ac1-3c7a-0000-000000000000</id>
+                        <type>PROCESSOR</type>
+                    </destination>
+                    <flowFileExpiration>0 sec</flowFileExpiration>
+                    <labelIndex>1</labelIndex>
+                    <name></name>
+                    <selectedRelationships>success</selectedRelationships>
+                    <source>
+                        <groupId>8ea9ed5d-3ea6-39c8-0000-000000000000</groupId>
+                        <id>8015c1a1-2a41-332d-0000-000000000000</id>
+                        <type>PROCESSOR</type>
+                    </source>
+                    <zIndex>0</zIndex>
+                </connections>
+                <connections>
+                    <id>b7701e6c-d070-38be-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
+                    <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
+                    <backPressureObjectThreshold>10000</backPressureObjectThreshold>
+                    <destination>
+                        <groupId>8ea9ed5d-3ea6-39c8-0000-000000000000</groupId>
+                        <id>279d8dd1-9419-3ebd-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </destination>
                     <flowFileExpiration>0 sec</flowFileExpiration>
@@ -46,20 +68,20 @@ via Data Seed based on Card API</label>
                     <name></name>
                     <selectedRelationships>splits</selectedRelationships>
                     <source>
-                        <groupId>f170aea0-1407-3a83-0000-000000000000</groupId>
-                        <id>b601d569-c0b7-3e1a-0000-000000000000</id>
+                        <groupId>8ea9ed5d-3ea6-39c8-0000-000000000000</groupId>
+                        <id>79f7b6ba-8ac1-3c7a-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </source>
                     <zIndex>0</zIndex>
                 </connections>
                 <connections>
-                    <id>d2964195-ddd1-32e1-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
+                    <id>bd3e9758-5faf-32ce-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
                     <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
                     <backPressureObjectThreshold>10000</backPressureObjectThreshold>
                     <destination>
-                        <groupId>f170aea0-1407-3a83-0000-000000000000</groupId>
-                        <id>791dc651-57e9-3057-0000-000000000000</id>
+                        <groupId>8ea9ed5d-3ea6-39c8-0000-000000000000</groupId>
+                        <id>94ec559a-c1ef-35be-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </destination>
                     <flowFileExpiration>0 sec</flowFileExpiration>
@@ -67,57 +89,15 @@ via Data Seed based on Card API</label>
                     <name></name>
                     <selectedRelationships>success</selectedRelationships>
                     <source>
-                        <groupId>f170aea0-1407-3a83-0000-000000000000</groupId>
-                        <id>6c5d32a3-07cf-385d-0000-000000000000</id>
+                        <groupId>8ea9ed5d-3ea6-39c8-0000-000000000000</groupId>
+                        <id>8e06078c-1409-39c1-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </source>
                     <zIndex>0</zIndex>
                 </connections>
                 <connections>
-                    <id>d377f3c1-8606-3218-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
-                    <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
-                    <backPressureObjectThreshold>10000</backPressureObjectThreshold>
-                    <destination>
-                        <groupId>f170aea0-1407-3a83-0000-000000000000</groupId>
-                        <id>8d9501c6-9f0e-3032-0000-000000000000</id>
-                        <type>PROCESSOR</type>
-                    </destination>
-                    <flowFileExpiration>0 sec</flowFileExpiration>
-                    <labelIndex>1</labelIndex>
-                    <name></name>
-                    <selectedRelationships>success</selectedRelationships>
-                    <source>
-                        <groupId>f170aea0-1407-3a83-0000-000000000000</groupId>
-                        <id>e57f1a31-70b9-3b98-0000-000000000000</id>
-                        <type>PROCESSOR</type>
-                    </source>
-                    <zIndex>0</zIndex>
-                </connections>
-                <connections>
-                    <id>f442a538-2d53-3900-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
-                    <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
-                    <backPressureObjectThreshold>10000</backPressureObjectThreshold>
-                    <destination>
-                        <groupId>f170aea0-1407-3a83-0000-000000000000</groupId>
-                        <id>e57f1a31-70b9-3b98-0000-000000000000</id>
-                        <type>PROCESSOR</type>
-                    </destination>
-                    <flowFileExpiration>0 sec</flowFileExpiration>
-                    <labelIndex>1</labelIndex>
-                    <name></name>
-                    <selectedRelationships>success</selectedRelationships>
-                    <source>
-                        <groupId>f170aea0-1407-3a83-0000-000000000000</groupId>
-                        <id>791dc651-57e9-3057-0000-000000000000</id>
-                        <type>PROCESSOR</type>
-                    </source>
-                    <zIndex>0</zIndex>
-                </connections>
-                <connections>
-                    <id>46ce0c5c-dfc3-3694-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
+                    <id>c56508ec-92fc-33d1-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
                     <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
                     <backPressureObjectThreshold>10000</backPressureObjectThreshold>
                     <bends>
@@ -129,8 +109,8 @@ via Data Seed based on Card API</label>
                         <y>214.6538441918708</y>
                     </bends>
                     <destination>
-                        <groupId>f170aea0-1407-3a83-0000-000000000000</groupId>
-                        <id>791dc651-57e9-3057-0000-000000000000</id>
+                        <groupId>8ea9ed5d-3ea6-39c8-0000-000000000000</groupId>
+                        <id>5adf7901-17b2-337f-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </destination>
                     <flowFileExpiration>0 sec</flowFileExpiration>
@@ -138,20 +118,20 @@ via Data Seed based on Card API</label>
                     <name></name>
                     <selectedRelationships>failure</selectedRelationships>
                     <source>
-                        <groupId>f170aea0-1407-3a83-0000-000000000000</groupId>
-                        <id>791dc651-57e9-3057-0000-000000000000</id>
+                        <groupId>8ea9ed5d-3ea6-39c8-0000-000000000000</groupId>
+                        <id>5adf7901-17b2-337f-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </source>
                     <zIndex>0</zIndex>
                 </connections>
                 <connections>
-                    <id>55a78752-66d0-316e-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
+                    <id>e5a16631-215f-31c6-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
                     <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
                     <backPressureObjectThreshold>10000</backPressureObjectThreshold>
                     <destination>
-                        <groupId>f170aea0-1407-3a83-0000-000000000000</groupId>
-                        <id>b601d569-c0b7-3e1a-0000-000000000000</id>
+                        <groupId>8ea9ed5d-3ea6-39c8-0000-000000000000</groupId>
+                        <id>8e06078c-1409-39c1-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </destination>
                     <flowFileExpiration>0 sec</flowFileExpiration>
@@ -159,126 +139,89 @@ via Data Seed based on Card API</label>
                     <name></name>
                     <selectedRelationships>success</selectedRelationships>
                     <source>
-                        <groupId>f170aea0-1407-3a83-0000-000000000000</groupId>
-                        <id>5a58acd2-92a7-3c86-0000-000000000000</id>
+                        <groupId>8ea9ed5d-3ea6-39c8-0000-000000000000</groupId>
+                        <id>5adf7901-17b2-337f-0000-000000000000</id>
+                        <type>PROCESSOR</type>
+                    </source>
+                    <zIndex>0</zIndex>
+                </connections>
+                <connections>
+                    <id>38964048-6201-3745-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
+                    <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
+                    <backPressureObjectThreshold>10000</backPressureObjectThreshold>
+                    <destination>
+                        <groupId>8ea9ed5d-3ea6-39c8-0000-000000000000</groupId>
+                        <id>5adf7901-17b2-337f-0000-000000000000</id>
+                        <type>PROCESSOR</type>
+                    </destination>
+                    <flowFileExpiration>0 sec</flowFileExpiration>
+                    <labelIndex>1</labelIndex>
+                    <name></name>
+                    <selectedRelationships>success</selectedRelationships>
+                    <source>
+                        <groupId>8ea9ed5d-3ea6-39c8-0000-000000000000</groupId>
+                        <id>279d8dd1-9419-3ebd-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </source>
                     <zIndex>0</zIndex>
                 </connections>
                 <controllerServices>
-                    <id>aec7472b-8a46-3f36-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
+                    <id>b8b8d817-8367-3843-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
                     <bundle>
-                        <artifact>nifi-record-serialization-services-nar</artifact>
+                        <artifact>nifi-registry-nar</artifact>
                         <group>org.apache.nifi</group>
                         <version>1.5.0</version>
                     </bundle>
                     <comments></comments>
                     <descriptors>
                         <entry>
-                            <key>Schema Write Strategy</key>
+                            <key>avro-reg-validated-field-names</key>
                             <value>
-<name>Schema Write Strategy</name>
+<name>avro-reg-validated-field-names</name>
                             </value>
                         </entry>
                         <entry>
-                            <key>schema-access-strategy</key>
+                            <key>transaction</key>
                             <value>
-<name>schema-access-strategy</name>
-                            </value>
-                        </entry>
-                        <entry>
-                            <key>schema-registry</key>
-                            <value>
-<identifiesControllerService>org.apache.nifi.schemaregistry.services.SchemaRegistry</identifiesControllerService>
-<name>schema-registry</name>
-                            </value>
-                        </entry>
-                        <entry>
-                            <key>schema-name</key>
-                            <value>
-<name>schema-name</name>
-                            </value>
-                        </entry>
-                        <entry>
-                            <key>schema-text</key>
-                            <value>
-<name>schema-text</name>
-                            </value>
-                        </entry>
-                        <entry>
-                            <key>Date Format</key>
-                            <value>
-<name>Date Format</name>
-                            </value>
-                        </entry>
-                        <entry>
-                            <key>Time Format</key>
-                            <value>
-<name>Time Format</name>
-                            </value>
-                        </entry>
-                        <entry>
-                            <key>Timestamp Format</key>
-                            <value>
-<name>Timestamp Format</name>
-                            </value>
-                        </entry>
-                        <entry>
-                            <key>Pretty Print JSON</key>
-                            <value>
-<name>Pretty Print JSON</name>
-                            </value>
-                        </entry>
-                        <entry>
-                            <key>suppress-nulls</key>
-                            <value>
-<name>suppress-nulls</name>
+<name>transaction</name>
                             </value>
                         </entry>
                     </descriptors>
-                    <name>JsonRecordSetWriter</name>
+                    <name>AvroSchemaRegistry</name>
                     <persistsState>false</persistsState>
                     <properties>
                         <entry>
-                            <key>Schema Write Strategy</key>
+                            <key>avro-reg-validated-field-names</key>
                         </entry>
                         <entry>
-                            <key>schema-access-strategy</key>
-                            <value>schema-name</value>
-                        </entry>
-                        <entry>
-                            <key>schema-registry</key>
-                            <value>2d9f418b-d9b2-332c-0000-000000000000</value>
-                        </entry>
-                        <entry>
-                            <key>schema-name</key>
-                        </entry>
-                        <entry>
-                            <key>schema-text</key>
-                        </entry>
-                        <entry>
-                            <key>Date Format</key>
-                        </entry>
-                        <entry>
-                            <key>Time Format</key>
-                        </entry>
-                        <entry>
-                            <key>Timestamp Format</key>
-                        </entry>
-                        <entry>
-                            <key>Pretty Print JSON</key>
-                        </entry>
-                        <entry>
-                            <key>suppress-nulls</key>
+                            <key>transaction</key>
+                            <value>{
+  "name": "transactionRecord",
+  "type": "record",
+  "fields": [
+    { "name": "idx", "type": "long" },
+    { "name": "accountNumber", "type": "string" },
+    { "name": "accountType", "type": "string" },
+    { "name": "merchantId", "type": "string" },
+    { "name": "merchantType", "type": "string" },
+    { "name": "transactionId", "type": "string" },
+    { "name": "amount", "type": "string" },
+    { "name": "currency", "type": "string" },
+    { "name": "isCardPresent", "type": "string" },
+    { "name": "transactionTimeStamp", "type": "string" }
+  ]
+}
+</value>
                         </entry>
                     </properties>
                     <state>ENABLED</state>
-                    <type>org.apache.nifi.json.JsonRecordSetWriter</type>
+                    <type>org.apache.nifi.schemaregistry.services.AvroSchemaRegistry</type>
                 </controllerServices>
                 <controllerServices>
-                    <id>b57c04f5-af42-3d18-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
+                    <id>d785e2d2-755a-362e-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
                     <bundle>
                         <artifact>nifi-record-serialization-services-nar</artifact>
                         <group>org.apache.nifi</group>
@@ -405,7 +348,7 @@ via Data Seed based on Card API</label>
                         </entry>
                         <entry>
                             <key>schema-registry</key>
-                            <value>2d9f418b-d9b2-332c-0000-000000000000</value>
+                            <value>b8b8d817-8367-3843-0000-000000000000</value>
                         </entry>
                         <entry>
                             <key>schema-name</key>
@@ -461,348 +404,119 @@ via Data Seed based on Card API</label>
                     <type>org.apache.nifi.csv.CSVReader</type>
                 </controllerServices>
                 <controllerServices>
-                    <id>2d9f418b-d9b2-332c-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
+                    <id>2749f42c-fcf1-31ca-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
                     <bundle>
-                        <artifact>nifi-registry-nar</artifact>
+                        <artifact>nifi-record-serialization-services-nar</artifact>
                         <group>org.apache.nifi</group>
                         <version>1.5.0</version>
                     </bundle>
                     <comments></comments>
                     <descriptors>
                         <entry>
-                            <key>avro-reg-validated-field-names</key>
+                            <key>Schema Write Strategy</key>
                             <value>
-<name>avro-reg-validated-field-names</name>
+<name>Schema Write Strategy</name>
                             </value>
                         </entry>
                         <entry>
-                            <key>transaction</key>
+                            <key>schema-access-strategy</key>
                             <value>
-<name>transaction</name>
+<name>schema-access-strategy</name>
+                            </value>
+                        </entry>
+                        <entry>
+                            <key>schema-registry</key>
+                            <value>
+<identifiesControllerService>org.apache.nifi.schemaregistry.services.SchemaRegistry</identifiesControllerService>
+<name>schema-registry</name>
+                            </value>
+                        </entry>
+                        <entry>
+                            <key>schema-name</key>
+                            <value>
+<name>schema-name</name>
+                            </value>
+                        </entry>
+                        <entry>
+                            <key>schema-text</key>
+                            <value>
+<name>schema-text</name>
+                            </value>
+                        </entry>
+                        <entry>
+                            <key>Date Format</key>
+                            <value>
+<name>Date Format</name>
+                            </value>
+                        </entry>
+                        <entry>
+                            <key>Time Format</key>
+                            <value>
+<name>Time Format</name>
+                            </value>
+                        </entry>
+                        <entry>
+                            <key>Timestamp Format</key>
+                            <value>
+<name>Timestamp Format</name>
+                            </value>
+                        </entry>
+                        <entry>
+                            <key>Pretty Print JSON</key>
+                            <value>
+<name>Pretty Print JSON</name>
+                            </value>
+                        </entry>
+                        <entry>
+                            <key>suppress-nulls</key>
+                            <value>
+<name>suppress-nulls</name>
                             </value>
                         </entry>
                     </descriptors>
-                    <name>AvroSchemaRegistry</name>
+                    <name>JsonRecordSetWriter</name>
                     <persistsState>false</persistsState>
                     <properties>
                         <entry>
-                            <key>avro-reg-validated-field-names</key>
+                            <key>Schema Write Strategy</key>
                         </entry>
                         <entry>
-                            <key>transaction</key>
-                            <value>{
-  "name": "transactionRecord",
-  "type": "record",
-  "fields": [
-    { "name": "idx", "type": "long" },
-    { "name": "accountNumber", "type": "string" },
-    { "name": "accountType", "type": "string" },
-    { "name": "merchantId", "type": "string" },
-    { "name": "merchantType", "type": "string" },
-    { "name": "transactionId", "type": "string" },
-    { "name": "amount", "type": "string" },
-    { "name": "currency", "type": "string" },
-    { "name": "isCardPresent", "type": "string" },
-    { "name": "latitude", "type": "string" },
-    { "name": "stringitude", "type": "string" },
-    { "name": "ipAddress", "type": ["null", "string"] },
-    { "name": "transactionTimeStamp", "type": "string" }
-  ]
-}
-</value>
+                            <key>schema-access-strategy</key>
+                            <value>schema-name</value>
+                        </entry>
+                        <entry>
+                            <key>schema-registry</key>
+                            <value>b8b8d817-8367-3843-0000-000000000000</value>
+                        </entry>
+                        <entry>
+                            <key>schema-name</key>
+                        </entry>
+                        <entry>
+                            <key>schema-text</key>
+                        </entry>
+                        <entry>
+                            <key>Date Format</key>
+                        </entry>
+                        <entry>
+                            <key>Time Format</key>
+                        </entry>
+                        <entry>
+                            <key>Timestamp Format</key>
+                        </entry>
+                        <entry>
+                            <key>Pretty Print JSON</key>
+                        </entry>
+                        <entry>
+                            <key>suppress-nulls</key>
                         </entry>
                     </properties>
                     <state>ENABLED</state>
-                    <type>org.apache.nifi.schemaregistry.services.AvroSchemaRegistry</type>
+                    <type>org.apache.nifi.json.JsonRecordSetWriter</type>
                 </controllerServices>
                 <processors>
-                    <id>8d9501c6-9f0e-3032-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
-                    <position>
-                        <x>1680.600522406533</x>
-                        <y>622.9125848425538</y>
-                    </position>
-                    <bundle>
-                        <artifact>nifi-standard-nar</artifact>
-                        <group>org.apache.nifi</group>
-                        <version>1.5.0</version>
-                    </bundle>
-                    <config>
-                        <bulletinLevel>WARN</bulletinLevel>
-                        <comments></comments>
-                        <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
-                        <descriptors>
-                            <entry>
-<key>Directory</key>
-<value>
-    <name>Directory</name>
-</value>
-                            </entry>
-                            <entry>
-<key>Conflict Resolution Strategy</key>
-<value>
-    <name>Conflict Resolution Strategy</name>
-</value>
-                            </entry>
-                            <entry>
-<key>Create Missing Directories</key>
-<value>
-    <name>Create Missing Directories</name>
-</value>
-                            </entry>
-                            <entry>
-<key>Maximum File Count</key>
-<value>
-    <name>Maximum File Count</name>
-</value>
-                            </entry>
-                            <entry>
-<key>Last Modified Time</key>
-<value>
-    <name>Last Modified Time</name>
-</value>
-                            </entry>
-                            <entry>
-<key>Permissions</key>
-<value>
-    <name>Permissions</name>
-</value>
-                            </entry>
-                            <entry>
-<key>Owner</key>
-<value>
-    <name>Owner</name>
-</value>
-                            </entry>
-                            <entry>
-<key>Group</key>
-<value>
-    <name>Group</name>
-</value>
-                            </entry>
-                        </descriptors>
-                        <executionNode>ALL</executionNode>
-                        <lossTolerant>false</lossTolerant>
-                        <penaltyDuration>30 sec</penaltyDuration>
-                        <properties>
-                            <entry>
-<key>Directory</key>
-<value>/opt/u01/gwork/rtdm/nifi/output</value>
-                            </entry>
-                            <entry>
-<key>Conflict Resolution Strategy</key>
-<value>fail</value>
-                            </entry>
-                            <entry>
-<key>Create Missing Directories</key>
-<value>true</value>
-                            </entry>
-                            <entry>
-<key>Maximum File Count</key>
-                            </entry>
-                            <entry>
-<key>Last Modified Time</key>
-                            </entry>
-                            <entry>
-<key>Permissions</key>
-                            </entry>
-                            <entry>
-<key>Owner</key>
-                            </entry>
-                            <entry>
-<key>Group</key>
-                            </entry>
-                        </properties>
-                        <runDurationMillis>0</runDurationMillis>
-                        <schedulingPeriod>0 sec</schedulingPeriod>
-                        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-                        <yieldDuration>1 sec</yieldDuration>
-                    </config>
-                    <name>PutFile</name>
-                    <relationships>
-                        <autoTerminate>true</autoTerminate>
-                        <name>failure</name>
-                    </relationships>
-                    <relationships>
-                        <autoTerminate>true</autoTerminate>
-                        <name>success</name>
-                    </relationships>
-                    <state>STOPPED</state>
-                    <style/>
-                    <type>org.apache.nifi.processors.standard.PutFile</type>
-                </processors>
-                <processors>
-                    <id>b601d569-c0b7-3e1a-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
-                    <position>
-                        <x>1010.535825140908</x>
-                        <y>373.98546081911627</y>
-                    </position>
-                    <bundle>
-                        <artifact>nifi-standard-nar</artifact>
-                        <group>org.apache.nifi</group>
-                        <version>1.5.0</version>
-                    </bundle>
-                    <config>
-                        <bulletinLevel>WARN</bulletinLevel>
-                        <comments></comments>
-                        <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
-                        <descriptors>
-                            <entry>
-<key>Line Split Count</key>
-<value>
-    <name>Line Split Count</name>
-</value>
-                            </entry>
-                            <entry>
-<key>Maximum Fragment Size</key>
-<value>
-    <name>Maximum Fragment Size</name>
-</value>
-                            </entry>
-                            <entry>
-<key>Header Line Count</key>
-<value>
-    <name>Header Line Count</name>
-</value>
-                            </entry>
-                            <entry>
-<key>Header Line Marker Characters</key>
-<value>
-    <name>Header Line Marker Characters</name>
-</value>
-                            </entry>
-                            <entry>
-<key>Remove Trailing Newlines</key>
-<value>
-    <name>Remove Trailing Newlines</name>
-</value>
-                            </entry>
-                        </descriptors>
-                        <executionNode>ALL</executionNode>
-                        <lossTolerant>false</lossTolerant>
-                        <penaltyDuration>30 sec</penaltyDuration>
-                        <properties>
-                            <entry>
-<key>Line Split Count</key>
-<value>1</value>
-                            </entry>
-                            <entry>
-<key>Maximum Fragment Size</key>
-                            </entry>
-                            <entry>
-<key>Header Line Count</key>
-<value>0</value>
-                            </entry>
-                            <entry>
-<key>Header Line Marker Characters</key>
-                            </entry>
-                            <entry>
-<key>Remove Trailing Newlines</key>
-<value>true</value>
-                            </entry>
-                        </properties>
-                        <runDurationMillis>0</runDurationMillis>
-                        <schedulingPeriod>0 sec</schedulingPeriod>
-                        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-                        <yieldDuration>1 sec</yieldDuration>
-                    </config>
-                    <name>SplitText</name>
-                    <relationships>
-                        <autoTerminate>true</autoTerminate>
-                        <name>failure</name>
-                    </relationships>
-                    <relationships>
-                        <autoTerminate>true</autoTerminate>
-                        <name>original</name>
-                    </relationships>
-                    <relationships>
-                        <autoTerminate>false</autoTerminate>
-                        <name>splits</name>
-                    </relationships>
-                    <state>STOPPED</state>
-                    <style/>
-                    <type>org.apache.nifi.processors.standard.SplitText</type>
-                </processors>
-                <processors>
-                    <id>e57f1a31-70b9-3b98-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
-                    <position>
-                        <x>1685.866100270638</x>
-                        <y>377.4829120095626</y>
-                    </position>
-                    <bundle>
-                        <artifact>nifi-update-attribute-nar</artifact>
-                        <group>org.apache.nifi</group>
-                        <version>1.5.0</version>
-                    </bundle>
-                    <config>
-                        <bulletinLevel>WARN</bulletinLevel>
-                        <comments></comments>
-                        <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
-                        <descriptors>
-                            <entry>
-<key>Delete Attributes Expression</key>
-<value>
-    <name>Delete Attributes Expression</name>
-</value>
-                            </entry>
-                            <entry>
-<key>Store State</key>
-<value>
-    <name>Store State</name>
-</value>
-                            </entry>
-                            <entry>
-<key>Stateful Variables Initial Value</key>
-<value>
-    <name>Stateful Variables Initial Value</name>
-</value>
-                            </entry>
-                            <entry>
-<key>filename</key>
-<value>
-    <name>filename</name>
-</value>
-                            </entry>
-                        </descriptors>
-                        <executionNode>ALL</executionNode>
-                        <lossTolerant>false</lossTolerant>
-                        <penaltyDuration>30 sec</penaltyDuration>
-                        <properties>
-                            <entry>
-<key>Delete Attributes Expression</key>
-                            </entry>
-                            <entry>
-<key>Store State</key>
-<value>Do not store state</value>
-                            </entry>
-                            <entry>
-<key>Stateful Variables Initial Value</key>
-                            </entry>
-                            <entry>
-<key>filename</key>
-<value>transactions-${uuid}.json</value>
-                            </entry>
-                        </properties>
-                        <runDurationMillis>0</runDurationMillis>
-                        <schedulingPeriod>0 sec</schedulingPeriod>
-                        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-                        <yieldDuration>1 sec</yieldDuration>
-                    </config>
-                    <name>Set JSON filename</name>
-                    <relationships>
-                        <autoTerminate>false</autoTerminate>
-                        <name>success</name>
-                    </relationships>
-                    <state>STOPPED</state>
-                    <style/>
-                    <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
-                </processors>
-                <processors>
-                    <id>5a58acd2-92a7-3c86-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
+                    <id>8015c1a1-2a41-332d-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
                     <position>
                         <x>1013.535825140908</x>
                         <y>130.98546081911627</y>
@@ -955,8 +669,199 @@ via Data Seed based on Card API</label>
                     <type>org.apache.nifi.processors.standard.GetFile</type>
                 </processors>
                 <processors>
-                    <id>6c5d32a3-07cf-385d-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
+                    <id>8e06078c-1409-39c1-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
+                    <position>
+                        <x>1685.866100270638</x>
+                        <y>377.4829120095626</y>
+                    </position>
+                    <bundle>
+                        <artifact>nifi-update-attribute-nar</artifact>
+                        <group>org.apache.nifi</group>
+                        <version>1.5.0</version>
+                    </bundle>
+                    <config>
+                        <bulletinLevel>WARN</bulletinLevel>
+                        <comments></comments>
+                        <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                        <descriptors>
+                            <entry>
+<key>Delete Attributes Expression</key>
+<value>
+    <name>Delete Attributes Expression</name>
+</value>
+                            </entry>
+                            <entry>
+<key>Store State</key>
+<value>
+    <name>Store State</name>
+</value>
+                            </entry>
+                            <entry>
+<key>Stateful Variables Initial Value</key>
+<value>
+    <name>Stateful Variables Initial Value</name>
+</value>
+                            </entry>
+                            <entry>
+<key>filename</key>
+<value>
+    <name>filename</name>
+</value>
+                            </entry>
+                        </descriptors>
+                        <executionNode>ALL</executionNode>
+                        <lossTolerant>false</lossTolerant>
+                        <penaltyDuration>30 sec</penaltyDuration>
+                        <properties>
+                            <entry>
+<key>Delete Attributes Expression</key>
+                            </entry>
+                            <entry>
+<key>Store State</key>
+<value>Do not store state</value>
+                            </entry>
+                            <entry>
+<key>Stateful Variables Initial Value</key>
+                            </entry>
+                            <entry>
+<key>filename</key>
+<value>transactions-${uuid}.json</value>
+                            </entry>
+                        </properties>
+                        <runDurationMillis>0</runDurationMillis>
+                        <schedulingPeriod>0 sec</schedulingPeriod>
+                        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                        <yieldDuration>1 sec</yieldDuration>
+                    </config>
+                    <name>Set JSON filename</name>
+                    <relationships>
+                        <autoTerminate>false</autoTerminate>
+                        <name>success</name>
+                    </relationships>
+                    <state>STOPPED</state>
+                    <style/>
+                    <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
+                </processors>
+                <processors>
+                    <id>94ec559a-c1ef-35be-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
+                    <position>
+                        <x>1680.600522406533</x>
+                        <y>622.9125848425538</y>
+                    </position>
+                    <bundle>
+                        <artifact>nifi-standard-nar</artifact>
+                        <group>org.apache.nifi</group>
+                        <version>1.5.0</version>
+                    </bundle>
+                    <config>
+                        <bulletinLevel>WARN</bulletinLevel>
+                        <comments></comments>
+                        <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                        <descriptors>
+                            <entry>
+<key>Directory</key>
+<value>
+    <name>Directory</name>
+</value>
+                            </entry>
+                            <entry>
+<key>Conflict Resolution Strategy</key>
+<value>
+    <name>Conflict Resolution Strategy</name>
+</value>
+                            </entry>
+                            <entry>
+<key>Create Missing Directories</key>
+<value>
+    <name>Create Missing Directories</name>
+</value>
+                            </entry>
+                            <entry>
+<key>Maximum File Count</key>
+<value>
+    <name>Maximum File Count</name>
+</value>
+                            </entry>
+                            <entry>
+<key>Last Modified Time</key>
+<value>
+    <name>Last Modified Time</name>
+</value>
+                            </entry>
+                            <entry>
+<key>Permissions</key>
+<value>
+    <name>Permissions</name>
+</value>
+                            </entry>
+                            <entry>
+<key>Owner</key>
+<value>
+    <name>Owner</name>
+</value>
+                            </entry>
+                            <entry>
+<key>Group</key>
+<value>
+    <name>Group</name>
+</value>
+                            </entry>
+                        </descriptors>
+                        <executionNode>ALL</executionNode>
+                        <lossTolerant>false</lossTolerant>
+                        <penaltyDuration>30 sec</penaltyDuration>
+                        <properties>
+                            <entry>
+<key>Directory</key>
+<value>/opt/u01/gwork/rtdm/nifi/output</value>
+                            </entry>
+                            <entry>
+<key>Conflict Resolution Strategy</key>
+<value>fail</value>
+                            </entry>
+                            <entry>
+<key>Create Missing Directories</key>
+<value>true</value>
+                            </entry>
+                            <entry>
+<key>Maximum File Count</key>
+                            </entry>
+                            <entry>
+<key>Last Modified Time</key>
+                            </entry>
+                            <entry>
+<key>Permissions</key>
+                            </entry>
+                            <entry>
+<key>Owner</key>
+                            </entry>
+                            <entry>
+<key>Group</key>
+                            </entry>
+                        </properties>
+                        <runDurationMillis>0</runDurationMillis>
+                        <schedulingPeriod>0 sec</schedulingPeriod>
+                        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                        <yieldDuration>1 sec</yieldDuration>
+                    </config>
+                    <name>PutFile</name>
+                    <relationships>
+                        <autoTerminate>true</autoTerminate>
+                        <name>failure</name>
+                    </relationships>
+                    <relationships>
+                        <autoTerminate>true</autoTerminate>
+                        <name>success</name>
+                    </relationships>
+                    <state>STOPPED</state>
+                    <style/>
+                    <type>org.apache.nifi.processors.standard.PutFile</type>
+                </processors>
+                <processors>
+                    <id>279d8dd1-9419-3ebd-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
                     <position>
                         <x>1008.3812255859375</x>
                         <y>594.5802001953125</y>
@@ -1040,8 +945,8 @@ via Data Seed based on Card API</label>
                     <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
                 </processors>
                 <processors>
-                    <id>791dc651-57e9-3057-0000-000000000000</id>
-                    <parentGroupId>f170aea0-1407-3a83-0000-000000000000</parentGroupId>
+                    <id>5adf7901-17b2-337f-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
                     <position>
                         <x>1689.268164455411</x>
                         <y>124.6538441918708</y>
@@ -1077,11 +982,11 @@ via Data Seed based on Card API</label>
                         <properties>
                             <entry>
 <key>record-reader</key>
-<value>b57c04f5-af42-3d18-0000-000000000000</value>
+<value>d785e2d2-755a-362e-0000-000000000000</value>
                             </entry>
                             <entry>
 <key>record-writer</key>
-<value>aec7472b-8a46-3f36-0000-000000000000</value>
+<value>2749f42c-fcf1-31ca-0000-000000000000</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -1102,10 +1007,103 @@ via Data Seed based on Card API</label>
                     <style/>
                     <type>org.apache.nifi.processors.standard.ConvertRecord</type>
                 </processors>
+                <processors>
+                    <id>79f7b6ba-8ac1-3c7a-0000-000000000000</id>
+                    <parentGroupId>8ea9ed5d-3ea6-39c8-0000-000000000000</parentGroupId>
+                    <position>
+                        <x>1010.535825140908</x>
+                        <y>373.98546081911627</y>
+                    </position>
+                    <bundle>
+                        <artifact>nifi-standard-nar</artifact>
+                        <group>org.apache.nifi</group>
+                        <version>1.5.0</version>
+                    </bundle>
+                    <config>
+                        <bulletinLevel>WARN</bulletinLevel>
+                        <comments></comments>
+                        <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                        <descriptors>
+                            <entry>
+<key>Line Split Count</key>
+<value>
+    <name>Line Split Count</name>
+</value>
+                            </entry>
+                            <entry>
+<key>Maximum Fragment Size</key>
+<value>
+    <name>Maximum Fragment Size</name>
+</value>
+                            </entry>
+                            <entry>
+<key>Header Line Count</key>
+<value>
+    <name>Header Line Count</name>
+</value>
+                            </entry>
+                            <entry>
+<key>Header Line Marker Characters</key>
+<value>
+    <name>Header Line Marker Characters</name>
+</value>
+                            </entry>
+                            <entry>
+<key>Remove Trailing Newlines</key>
+<value>
+    <name>Remove Trailing Newlines</name>
+</value>
+                            </entry>
+                        </descriptors>
+                        <executionNode>ALL</executionNode>
+                        <lossTolerant>false</lossTolerant>
+                        <penaltyDuration>30 sec</penaltyDuration>
+                        <properties>
+                            <entry>
+<key>Line Split Count</key>
+<value>1</value>
+                            </entry>
+                            <entry>
+<key>Maximum Fragment Size</key>
+                            </entry>
+                            <entry>
+<key>Header Line Count</key>
+<value>0</value>
+                            </entry>
+                            <entry>
+<key>Header Line Marker Characters</key>
+                            </entry>
+                            <entry>
+<key>Remove Trailing Newlines</key>
+<value>true</value>
+                            </entry>
+                        </properties>
+                        <runDurationMillis>0</runDurationMillis>
+                        <schedulingPeriod>0 sec</schedulingPeriod>
+                        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                        <yieldDuration>1 sec</yieldDuration>
+                    </config>
+                    <name>SplitText</name>
+                    <relationships>
+                        <autoTerminate>true</autoTerminate>
+                        <name>failure</name>
+                    </relationships>
+                    <relationships>
+                        <autoTerminate>true</autoTerminate>
+                        <name>original</name>
+                    </relationships>
+                    <relationships>
+                        <autoTerminate>false</autoTerminate>
+                        <name>splits</name>
+                    </relationships>
+                    <state>STOPPED</state>
+                    <style/>
+                    <type>org.apache.nifi.processors.standard.SplitText</type>
+                </processors>
             </contents>
-            <name>CsvRead</name>
+            <name>Copy of CsvRead</name>
             <variables/>
         </processGroups>
     </snippet>
-    <timestamp>03/18/2018 21:51:47 CET</timestamp>
+    <timestamp>03/25/2018 14:56:47 CEST</timestamp>
 </template>

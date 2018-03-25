@@ -124,6 +124,7 @@ Modell behúzása. Húzz rá egy 'Template' elemt a lapra, Felső ikonsor, utols
 
 Lett elvileg egy szép CsvRead ProcessGroup. Öröm.
 
+
 ### Nifi model editálás
 
 CsvRead ProcessGroupon duplakatt, ezáltal belépsz a groupba, bal alsó sarok mutatja: NiFi Flow >> CsvRead
@@ -132,6 +133,12 @@ Editálandó Processek, duplakatt processen:
   * GetFile, Property, Input directory, amit felvettél az előzőekben.
   * PutFile, Property, Directory, mint előbb, csak az output
 
+Nekem kellett még egy Controller Services indítás is:
+
+  * CSV Read alatt vagyunk
+  * Operate ablak, első ikonm (fogaskerék), CONROLLER SERVICES fül
+  * Kis villámocska ikonnal futtani kell mindhárom servicet
+  * (Először AvroSchema, másik kettő tőle függ.)
 ### NiFi futtatása
 
 Előtte kell egy adag teszt fájl, lásd "Előkészületek".
