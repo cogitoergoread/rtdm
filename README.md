@@ -80,16 +80,16 @@ Jó eséllyel legyárt 3 CSV fájlt:
   * customer.csv - Ügyfeleink
   * cards.csv - Bank kártyák az ügyfelekhez
   * transactions.csv - Bank kártyához tartozó tranzakciók
-
-ToDo: merchants.csv is kell !
+  * merchant.csv - Kereskedő adatok
 
 Valamint MySQL alatt lesznek adatok `mysql -p -u rtdm`:
 (Gondolom, Windows alatt is van valami konzol. Ha nagyon nincs, akor MySQLWorkbench programot installáld.)
 
-``` sql
+``` {sql}
 use rtdm
 select * from customer limit 10;
 select * from bank_card limit 10;
+select * from merchant limit 10;
 ```
 
 # NiFi modell
@@ -146,3 +146,30 @@ Előtte kell egy adag teszt fájl, lásd "Előkészületek".
   * Üres helyen katt. 
   * Operate Stop gomb (biztos, ami biztos)
   * Operate Start gomb
+
+## NiFi, SimulateBankCard.xml
+
+Arra szolgál, hogy kártyás tranzakciókat szimuláljunk, és hozzá rakjuk a banki adatokat.
+Most, hogy gndolkodom rajta, a fájl feldolgozást és flow controlt ki  kellene venni külön modulba, ha egyszer is akarunk HTTP bementetet.
+No majd egyszer.
+
+### NiFi
+
+SimulateBankCard.xml fájl felvenni template ként.
+Lásd előző részben.
+Ugyanazokat a dobozokat kell editálni, GetFile, PutFile.
+Kell hozzá a MySQL teszt adat is, lásd teszt adatok rész.
+
+Magában kiirkálja a flow fájlokat. Output portját kötni kell valami értelmeshez.
+
+### ExecuteSQL MySQL beállítás
+  * NiFi FLow >> SimualteBankCardTransactions
+  * ExecuteSQL process
+  * Properties, 'Database Connection Pooling Service', kis nyilacska a végén
+  * Ez átdob a COntroller Services' lapra, ott DBCPConnectionPool, fogaskerék
+  * Ki kell tölteni az alábbi Propertyket
+    * Database Connection URL: jdbc:mysql://localhost:3306/rtdm (Win alatt is lyesmi)
+	* Database Driver Class Name: com.mysql.jdbc.Driver
+	* Database Driver Location: file:///usr/share/java/mysql.jar (ahol van a MySQL Jar fájl, MySQL install során elvileg lett ilyen fájl)
+	* Database User: MySQL részből
+	* Password: mint előző

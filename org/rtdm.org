@@ -111,25 +111,75 @@ ParseInt,StrNotNullOrEmpty,StrNotNullOrEmpty,ParseInt,StrNotNullOrEmpty,ParseBig
     { "name": "amount", "type": "string" },
     { "name": "currency", "type": "string" },
     { "name": "isCardPresent", "type": "string" },
-    { "name": "latitude", "type": "string" },
-    { "name": "stringitude", "type": "string" },
-    { "name": "ipAddress", "type": ["null", "string"] },
     { "name": "transactionTimeStamp", "type": "string" }
   ]
 }
 
-
+**** Attributumok
+$.[0].accountNumber
+$.[0].accountType
+$.[0].merchantId
+$.[0].merchantType 
+$.[0].transactionId
+$.[0].amount
 *** Sima NiFi fájl feldolgozás
 Azért, hogy ne egyszerűbb legyen, kevés rekordot kap:
 cat nifi/work/transactions.csv | head > nifi/data/transactions.csv
 
 
-
 *** Execute SQL
+**** Sima select
 SELECT * from bank_card WHERE Card = '${accountNumber}';
 
+**** Minden lényeges adat
+select 
+  customer.Account, customer.Age, customer.Gender,
+  customer.Name, customer.Tel
+from bank_card left join customer 
+on ( customer.Account  = bank_card.Account ) 
+where bank_card.Card = '6796 8296 4350 6601';
+**** És Merchant is
+select 
+  customer.Account, customer.Age, customer.Gender,
+  customer.Name, customer.Tel,
+  merchant.name, merchant.lat, merchant.long
+from bank_card 
+left join customer 
+ on ( customer.Account  = bank_card.Account )
+join merchant
+where bank_card.Card = '6796 8296 4350 6601'
+  and merchant.id = 1001;
 
+'${accountNumber}'
+${merchantId}
 
+*** AVRO to JSON
+Nem kell séma, ha az AVRO fájlban van...
+{"type":"record",
+ "name":"customer",
+ "namespace":"any.data",
+ "fields":[{"name":"Account","type":["null","string"]},
+           {"name":"Age","type":["null","int"]},
+	   {"name":"Gender","type":["null","string"]},
+	   {"name":"Name","type":["null","string"]},
+	   {"name":"Tel","type":["null","string"]},
+	   {"name":"name","type":["null","string"]},
+	   {"name":"lat","type":["null","float"]},
+	   {"name":"long","type":["null","float"]}]}
+
+*** EvalJSONPath
+$.[0].Account
+$.[0].Age
+$.[0].Gender
+$.[0].Name
+$.[0].Tel
+$.[0].name
+$.[0].lat
+$.[0].long
+
+*** Attributesto JSON
+accountNumber,accountType,merchantId,merchantType,transactionId,amount
+Account,Age,Gender,Name,Tel,name,lat,long
 
 * Doksik
 ** CSV to JSON
