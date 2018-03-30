@@ -12,53 +12,17 @@ import random
 import pandas as pd
 import numpy as np
 import datetime as dt
+from param_dicts import merchant_category, account_types, merchants, crm_segment, gend_list, yn_list, trchg_list, incmcat_list, crdtscore_list
 
 random.seed(8128)
 
-# Dict of Dict, Külső kategóriák, belső: tranzakció értékek
-merchant_category = {
-        'élelmiszer' : {'min_value' : 500, 'max_value' : 38000},
-        'étterem' :  {'min_value' : 2000, 'max_value' : 10000},
-        'ruházat' :  {'min_value' : 5000, 'max_value' : 27000},
-        'egészség' :  {'min_value' : 1000, 'max_value' : 40000},
-        'elektronikai' :  {'min_value' : 10000, 'max_value' : 250000},
-        'üzemanyag' :  {'min_value' : 5000, 'max_value' : 20000},
-        'szórakozás' :  {'min_value' : 1000, 'max_value' : 8000},
-        'könyv' :  {'min_value' : 2000, 'max_value' : 7000},
-        'utazás' :  {'min_value' : 50000, 'max_value' : 350000}}
 
-# Kártya fajták
-account_types = ['VISA', 'MASTERCARD', 'JCB', 'MAESTRO', 'AMEX', 'DINERS']
+def rand_list(ilist):
+    """
+    Returns a random element from the list ilist
+    """
+    return ilist[random.randint(0, len(ilist)-1)]
 
-# Keresedők, kategóriák alapján Dict of Dict
-merchants = {
-        'élelmiszer' : [{'id' : 1001, 'name' : "CBA Déli", 'lat' : 47.4993318, 'long' : 19.0237523},
-                        {'id' : 1002, 'name' : "Spar Király", 'lat' : 47.50098 , 'long' : 19.0593837},
-                        {'id' : 1003, 'name' : "Aldi Kossuth", 'lat' : 47.4937711, 'long' : 19.0564734}],
-        'étterem' :  [{'id' : 1010, 'name' : "Tüköry", 'lat' : 47.5050979, 'long' : 19.0504007},
-                      {'id' : 1011, 'name' : "Kaltenberg", 'lat' :47.4861163, 'long' : 19.0647328},
-                      {'id' : 1012, 'name' : "Wang mester", 'lat' :47.5098377 , 'long' : 19.0981019}],
-        'ruházat' :  [{'id' : 1020, 'name' : "Berhska WE", 'lat' : 7.5132144, 'long' : 19.0568654},
-                      {'id' : 1021, 'name' : "TomTailor ÁR", 'lat' : 47.5024646, 'long' : 19.1347594},
-                      {'id' : 1022, 'name' : "Trapper Fő", 'lat' : 47.511583, 'long' : 19.035859}],
-        'egészség' :  [{'id' : 1030, 'name' : "Egressy Patika", 'lat' : 47.5065185, 'long' : 19.1019453},
-                      {'id' : 1031, 'name' : "Best Dental", 'lat' : 47.4999491, 'long' : 19.0571779},
-                      {'id' : 1032, 'name' : "Életerő mozgás", 'lat' : 47.510766, 'long' : 19.0513418}],
-        'elektronikai' :  [{'id' : 1040, 'name' : "MediaMarkt ARE", 'lat' : 47.4983895, 'long' : 19.0913913},
-                      {'id' : 1041, 'name' : "Mérkabolt Józ", 'lat' : 47.4955751, 'long' : 19.0689243},
-                      {'id' : 1042, 'name' : "HiFi Station", 'lat' : 47.517732, 'long' : 19.141521}],
-        'üzemanyag' :  [{'id' : 1050, 'name' : "MOL Róna", 'lat' : 47.5135858, 'long' : 19.1208947},
-                      {'id' : 1051, 'name' : "OMV Hun", 'lat' : 47.50853, 'long' : 19.0997001},
-                      {'id' : 1052, 'name' : "Shell Váci", 'lat' : 47.558184, 'long' : 19.07439}],
-        'szórakozás' :  [{'id' : 1060, 'name' : "ZAK", 'lat' : 47.5031823, 'long' : 19.0621811},
-                      {'id' : 1061, 'name' : "Katona", 'lat' : 47.4936625, 'long' : 19.0526852},
-                      {'id' : 1062, 'name' : "A38", 'lat' : 47.4771073, 'long' : 19.0602603}],
-        'könyv' : [{'id' : 1070, 'name' : "Írók boltja", 'lat' : 47.5042391, 'long' : 19.0599304},
-                      {'id' : 1071, 'name' : "TypoTex", 'lat' : 47.5085084, 'long' : 19.0194369},
-                      {'id' : 1072, 'name' : "Libri Blaha", 'lat' : 47.496119, 'long' : 19.066945}],
-        'utazás' : [{'id' : 1080, 'name' : "Vista Andr", 'lat' : 47.499512, 'long' : 19.053063},
-                      {'id' : 1081, 'name' : "IBUSZ Feren", 'lat' :47.492694 , 'long' : 19.053128},
-                      {'id' : 1082, 'name' : "Neckermann Vörö", 'lat' : 47.49721, 'long' : 19.0488859}]}
 
 def generate_merchants_df():
     """
@@ -73,61 +37,156 @@ def generate_merchants_df():
     merch.set_index('id', inplace=True)
     merch.to_csv("merchant.csv")
     return merch
-            
+
 
 def generate_random_name(gender):
     first_name_wmn = ['Hanna', 'Anna', 'Jázmin', 'Nóra', 'Boglárka', 'Zsófia', 'Lili', 'Réka', 'Dóra', 'Luca', 'Viktória', 'Emma', 'Vivien', 'Laura', 'Eszter', 'Fanni', 'Petra', 'Lilla', 'Csenge', 'Noémi', 'Sára', 'Dorina', 'Gréta', 'Zoé', 'Dorka', 'Rebeka', 'Bianka', 'Flóra', 'Léna', 'Panna', 'Lara', 'Maja', 'Kamilla', 'Szonja', 'Fruzsina', 'Virág', 'Blanka', 'Kinga', 'Ramóna', 'Kitti', 'Tímea', 'Janka', 'Kata', 'Júlia', 'Dorottya', 'Emese', 'Vanessza', 'Izabella', 'Mira', 'Nikolett', 'Liza', 'Veronika', 'Tamara', 'Alíz', 'Emília', 'Lilien', 'Kira', 'Adrienn', 'Amanda', 'Borbála', 'Leila', 'Kincső', 'Adél', 'Zselyke', 'Diána', 'Natália', 'Melissza', 'Abigél']
     first_name_men = ['Bence', 'Máté', 'Levente', 'Ádám', 'Dávid', 'Balázs', 'Dominik', 'Péter', 'Gergő', 'Milán', 'Tamás', 'Zsombor', 'Dániel', 'Bálint', 'Botond', 'Kristóf', 'Zalán', 'Áron', 'László', 'Márk', 'Attila', 'Zoltán', 'Noel', 'Marcell', 'András', 'Benedek', 'Ákos', 'Gábor', 'István', 'Olivér', 'Márton', 'Patrik', 'Roland', 'Zsolt', 'Kevin', 'János', 'Martin', 'Csaba', 'Hunor', 'Richárd', 'Benett', 'Gergely', 'József', 'Norbert', 'Nimród', 'Róbert', 'Sándor', 'Alex', 'Zétény', 'Ferenc', 'Erik', 'Viktor', 'Mátyás', 'Ábel', 'Kornél', 'Vince', 'Mihály', 'Nándor', 'Csongor', 'Tibor', 'Rikárdó', 'Ármin', 'Csanád', 'Adrián', 'Miklós', 'Imre', 'György', 'Gyula', 'Vilmos', 'Soma', 'Kende']
     last_name = ['Nagy', 'Kovács', 'Tóth', 'Szabó', 'Horváth', 'Varga', 'Kiss', 'Molnár', 'Németh', 'Farkas', 'Balogh', 'Papp', 'Takács', 'Juhász', 'Lakatos', 'Mészáros', 'Oláh', 'Simon', 'Rácz', 'Fekete', 'Szilágyi', 'Török', 'Fehér', 'Balázs', 'Gál', 'Kis', 'Szűcs', 'Kocsis', 'Orsós', 'Pintér', 'Fodor', 'Szalai', 'Sipos', 'Magyar', 'Lukács', 'Gulyás', 'Biró', 'Király', 'László', 'Katona', 'Jakab', 'Bogdán', 'Balog', 'Sándor', 'Boros', 'Fazekas', 'Kelemen', 'Váradi', 'Antal', 'Somogyi', 'Orosz', 'Fülöp', 'Veres', 'Vincze', 'Hegedűs', 'Budai', 'Deák', 'Pap', 'Bálint', 'Pál', 'Illés', 'Vass', 'Szőke', 'Vörös', 'Bognár', 'Fábián', 'Lengyel', 'Bodnár', 'Szücs', 'Hajdu', 'Halász', 'Jónás', 'Máté', 'Székely', 'Kozma', 'Gáspár', 'Pásztor', 'Bakos', 'Dudás', 'Major', 'Orbán', 'Hegedüs', 'Virág', 'Barna', 'Novák', 'Soós', 'Tamás', 'Nemes', 'Pataki', 'Balla', 'Faragó', 'Kerekes', 'Borbély', 'Barta', 'Péter', 'Szekeres', 'Csonka', 'Mezei', 'Márton', 'Sárközi']
-    return (last_name[random.randint(0, len(last_name)-1)] +
-                      " " +
-                      ( first_name_wmn[random.randint(0, len(first_name_wmn)-1)]
-                      if gender == 'N' else
-                      first_name_men[random.randint(0, len(first_name_men)-1)] ))
+    return (rand_list(last_name) +
+            " " +
+            (rand_list(first_name_wmn)
+             if gender == 'N' else
+             rand_list(first_name_men)))
+
 
 def generate_random_cardnr():
     return "{:04d} {:04d} {:04d} {:04d}".format(random.randint(0, 9999),
-            random.randint(0, 9999),
-            random.randint(0, 9999),
-            random.randint(0, 9999))
+                                                random.randint(0, 9999),
+                                                random.randint(0, 9999),
+                                                random.randint(0, 9999))
 
-def create_test_customers(nr_of_cust):
+
+class AccNr:
+    def __init__(self, startNr):
+        self.nr = startNr
+
+
+    def getNr(self):
+        self.nr += 1
+        return self.nr
+
+
+accNr = AccNr(230010000)
+transNr = AccNr(5382367345)
+cust_columns = ['Gender', 'Name', 'Age', 'Tel', 'BalanceAmount',
+                'CrmSegment', 'ShortTermCredit', 'FamilyMembers',
+                'TransactionTrend', 'IncomeCategory', 'NrOfDebCards',
+                'NrOfCredCards', 'CreditScore', 'AvgMonthlySpending',
+                'CreditLimit', 'PreviousDaySpending']
+
+
+def create_one_cust(cust_type):
+    """
+    Creates test Customer
+    cust_type: normal / model1
+    gen_phase: True = model phase, target variables added /False: transaction
+    Fields of Cust record:
+    Account: account number
+    Gender: N / F
+    Name: Full name
+    Age: in years
+    Tel: 3680123456
+    BalanceAmount: egyenleg összeg (decimal)
+    CrmSegment: crm_segment List - aCRM szegmens
+       (Aktív folyószámlahiteles, Tranzaktáló hosszúhiteles)
+    ShortTermCredit : Y/N - 2 hónapon belül lejáró hitel (Y/N)
+    FamilyMembers: - Háztartás mérete (short int)
+    TransactionTrend: Dec,DecDec,Stab,Inc,IncInc,Inact,) - Tranzakciók
+      változása (Csökkenés, Jelentõs csökkenés, Stabil, Inaktív
+         , Jelentõs növekedés)
+    IncomeCategory: XS,S,M,L,XL,XXL - Bevétel kategória (0-20M, 21-50M,
+       51-300M,..)
+    NrOfDebCards: - Betéti kártya db (decimal)
+    NrOfCredCards: - Hitelkártya fõkártya db (decimal)
+    CreditScore: - NO,S,M,L,XL, Hitel előminősített (0, 200-ig, 500-ig, 1m, 5m)
+    AvgMonthlySpending: - Átlagos havi költés
+    CreditLimit: - Bankkártya limit, decimal
+    PreviousDaySpending: - Előző napi kártyás vásárlás
+    CandidateTargetCreditIncrease: Model cél változó, majd tranzakciós
+    adatokba generálunk hitel kártya emelést
+    """
+    # Choose random gender
+    gender = rand_list(gend_list)
+    # Based on cust_type generate different random data
+    bal_amount, nr_of_cred_card, cred_score, avg_mon_spen = 0, 0, 'NO', 0
+    cc = 0
+    avg_mon_spen = random.randint(15418, 1024512)
+    if cust_type == 'normal':
+        # Set values for normal customer
+        cred_score = rand_list(crdtscore_list[:3])
+        nr_of_cred_card = random.randint(0, 1)
+        bal_amount = random.randint(int((avg_mon_spen / 3) *
+                                    (1.1 + random.random())),
+                                    768576)
+    else:
+        # Set values for Model Customer, model1
+        # - Hitelkártya fõkártya db >= 1
+        # - Hitel előminősített <> 0
+        # - egyenleg összeg (decimal), < Átlagos havi költés /3
+        cred_score = rand_list(crdtscore_list[3:])
+        nr_of_cred_card = random.randint(1, 3)
+        bal_amount = random.randint(314, int(avg_mon_spen / 3))
+        cc = 1
+    # Create Cust dict
+    cust_dic = {'Account': "{}".format(accNr.getNr()),
+                'Gender': gender,
+                'Name': generate_random_name(gender),
+                'Age': random.randint(18, 77),
+                'Tel': "3680{}".format(random.randint(100000, 887887)),
+                'BalanceAmount': bal_amount,
+                'CrmSegment': rand_list(crm_segment),
+                'ShortTermCredit': rand_list(yn_list),
+                'FamilyMembers': random.randint(1, 5),
+                'TransactionTrend': rand_list(trchg_list),
+                'IncomeCategory': rand_list(incmcat_list),
+                'NrOfDebCards': random.randint(1, 3),
+                'NrOfCredCards': nr_of_cred_card,
+                'CreditScore': cred_score,
+                'AvgMonthlySpending': avg_mon_spen,
+                'CreditLimit': random.randint(10, 120) * 10000,
+                'PreviousDaySpending': random.randint(13000, 320000),
+                'CandidateTargetCreditIncrease': cc}
+    return cust_dic
+
+
+#print(create_one_cust('normal', True))
+
+
+def create_test_customers(nr_of_cust, cust_type):
     """
     Random ügyfeleket vesz fel.
+
+    cust_type: normal / model1
+    gen_phase: True = model phase, target variables added / False: transaction
+
     Ebből DataFrame-t generál, és kiírja customer.csv néven.
     """
-    cust_list =list()
+    cust_list = list()
     for i in range(nr_of_cust):
-        gender = "N" if random.randint(0, 2) == 0 else "F"
-        cust_list.append({
-                'Account' : "23001{:04d}".format(i),
-                'Gender' : gender,
-                'Name' : generate_random_name(gender),
-                'Age' : random.randint(18,77),
-                'Tel' : "3680{}".format(random.randint(100000, 887887))})
+        cust_list.append(create_one_cust(cust_type))
     cust = pd.DataFrame(cust_list)
     cust.set_index('Account', inplace=True)
-    cust.to_csv("customer.csv")
     return cust
+
 
 def create_test_card(cust, nr_cards_over_one):
     """
-    Minden ügyfélnek generál egy random kártyát, 
+    Minden ügyfélnek generál egy random kártyát,
     ezen felül még nr_cards_over_one darabot véletlenszerűen
     """
     cardlist = list()
     # Minden ügyfélnek egy kártya
     for acc in cust.index:
-        cardlist.append({
-                'Account' : acc,
-                'Card' : generate_random_cardnr(),
-                'Type' : account_types[random.randint(0, len(account_types)-1)]})
+        cardlist.append({'Account': acc,
+                         'Card': generate_random_cardnr(),
+                         'Type': rand_list(account_types)})
     # És még nr_...
     for i in range(nr_cards_over_one):
         cardlist.append({
-                'Account' : cust.index[random.randint(0,len(cust.index)-1)],
-                'Card' : generate_random_cardnr(),
-                'Type' : account_types[random.randint(0, len(account_types)-1)]})
+                'Account': cust.index[random.randint(0,len(cust.index)-1)],
+                'Card': generate_random_cardnr(),
+                'Type': rand_list(account_types)})
     # DataFrame
     cards = pd.DataFrame(cardlist)
     cards.set_index('Card', inplace=True)
@@ -142,107 +201,211 @@ def write_static_db(cust, card, merch):
     import mysql.connector
     from sqlalchemy import create_engine
     from sqlalchemy.types import Float, String, BigInteger, Integer
-    db_connection = 'mysql+mysqlconnector://rtdm:rtdm123Kecske@localhost:3306/rtdm'
-    engine = create_engine(db_connection, echo=False, encoding='utf-8')
-    cust.reset_index().to_sql(name='customer', 
-                    con=engine,
-                    dtype={'Account' : BigInteger, 'Age' : Integer,
-                           'Gender' : String(1), 'Name' : String(50),
-                           'Tel' : String(20)},
-                    if_exists = 'replace', 
-                    index=False)
+    db_con = 'mysql+mysqlconnector://rtdm:rtdm123Kecske@localhost:3306/rtdm'
+    engine = create_engine(db_con, echo=False, encoding='utf-8')
+    (cust[cust_columns]
+     .reset_index()
+     .to_sql(name='customer',
+             con=engine,
+             dtype={'Account': BigInteger, 'Age': Integer,
+                    'Gender': String(1), 'Name': String(50),
+                    'Tel': String(20),
+                    'BalanceAmount': Integer,
+                    'CrmSegment': String(15),
+                    'ShortTermCredit': String(1),
+                    'FamilyMembers': Integer,
+                    'TransactionTrend': String(10),
+                    'IncomeCategory': String(5),
+                    'NrOfDebCards': Integer,
+                    'NrOfCredCards': Integer,
+                    'CreditScore': String(5),
+                    'AvgMonthlySpending': Integer,
+                    'CreditLimit': Integer,
+                    'PreviousDaySpending': Integer},
+             if_exists='replace',
+             index=False))
     card.reset_index().to_sql(name='bank_card',
-                    con=engine,
-                    dtype={'Card' : String(20), 'Account' : BigInteger,
-                           'Type' : String(21)},
-                    if_exists = 'replace',
-                    index=False)
+                              con=engine,
+                              dtype={'Card': String(20),
+                                     'Account': BigInteger,
+                                     'Type': String(21)},
+                              if_exists='replace',
+                              index=False)
     merch.reset_index().to_sql(name='merchant',
-                     con=engine,
-                     dtype={'id': Integer, 'name' : String(30),
-                            'type' : String(20), 'long' : Float,
-                            'lat' : Float, 'category': String(20)},
-                     if_exists = 'replace',
-                     index=False)
+                               con=engine,
+                               dtype={'id': Integer, 'name': String(30),
+                                      'type': String(20), 'long': Float,
+                                      'lat': Float, 'category': String(20)},
+                               if_exists='replace',
+                               index=False)
     # Create Primary keys
     with engine.connect() as con:
         con.execute('ALTER TABLE bank_card ADD PRIMARY KEY (Card);')
         con.execute('ALTER TABLE customer ADD PRIMARY KEY (Account);')
         con.execute('ALTER TABLE merchant ADD PRIMARY KEY (id);')
-    
-# Params
-simulation_start = "2018.04.01 08:00:00"
-epoch=dt.datetime.fromtimestamp(0)
-simualtion_stamp = ( dt.datetime.strptime(simulation_start.strip(),
-                                          '%Y.%m.%d %H:%M:%S') - epoch).total_seconds()
-trip_delta = 5      # 5 percenként vásárol
-cust = create_test_customers(nr_of_cust=300)
-card = create_test_card(cust, nr_cards_over_one=200)
-merch = generate_merchants_df()
-write_static_db(cust, card, merch)
-trans_id_start = 5382367345
 
 
-def get_random_trans(cardNumber, cardType, trans_date):
-    global trans_id_start
-    randmerchcatid = (list(merchant_category.keys())
-        [random.randrange(0, len(merchant_category))])
-    randmerchcat = merchant_category[randmerchcatid]
-    merchant = merchants[randmerchcatid][random.randrange(0,
-                        len(merchants[randmerchcatid]))]
-    trans_id_start +=1
-    return {'accountNumber' : cardNumber,
-            'accountType' : cardType,
-            'merchantId' : merchant['id'],
-            'merchantType' : randmerchcatid,
-            'transactionId' : trans_id_start,
-            'amount' : random.randrange(randmerchcat['min_value'],randmerchcat['max_value']),
-            'currency' : 'HUF',
-            'isCardPresent' : "True",
-            'transactionTimeStamp' : trans_date}
-
-
-def create_test_transactions(nr_trips, nr_unknown):
+def get_random_trans(cardNumber, cardType, trans_date, feature_flag=None):
     """
-    Véletlen tranzakcis adatokat generál.
+    Returns a transaction dict.
+    feature_flag = None: No feeture at all, 1: Feature set, 0: Feature no
+    """
+    randmerchcatid = rand_list(list(merchant_category.keys()))
+    randmerchcat = merchant_category[randmerchcatid]
+    merchant = rand_list(merchants[randmerchcatid])
+    trans = {'accountNumber': cardNumber,
+             'accountType': cardType,
+             'merchantId': merchant['id'],
+             'merchantType': randmerchcatid,
+             'transactionId': transNr.getNr(),
+             'amount': random.randrange(randmerchcat['min_value'],
+                                        randmerchcat['max_value']),
+             'currency': 'HUF',
+             'isCardPresent': "True",
+             'transactionTimeStamp': trans_date}
+    # Add feature
+    if feature_flag is None:
+        # Ha nem modellezünk, nem írja fel a feature flaget
+        pass
+    else:
+        # Modellezéskor meg felírja
+        trans['feature_1'] = feature_flag
+    return trans
+
+
+def create_test_transactions(nr_trips, nr_unknown, cust, card, is_model,
+                             filename):
+    """
+    Véletlen tranzakciós adatokat generál.
     Trip, néhány vásárlást érintő útvonal, random hosszú.
     UnKnown: véletlen kártyaszám.
     DataFrame, kiírja CSV fájlba.
+
+    is_model: True esetén efature flaget átadja
     """
     import csv
     trans_list = list()
     # Tranzakciók az ügyfelekre
     for i in range(nr_trips):
-        # Vásárlások hossza szép normális legyen, de torzítva min 1-re
-        trip_len = int(max(1, np.random.normal(loc=4, scale=4)))
         # Index of the card item
         randind = random.randrange(0, len(card))
+        isCandidate = (cust
+                       .loc[card.iloc[randind]['Account']]
+                       ['CandidateTargetCreditIncrease'])
+        if isCandidate == 0:
+            # Nem speciális ügyfél
+            # Vásárlások hossza szép normális legyen, de torzítva min 1-re
+            trip_len = int(max(1, np.random.normal(loc=4, scale=4)))
+        else:
+            # Speciális ügyfél
+            # Vásárlások hossza szép normális legyen, de torzítva min 3-re
+            trip_len = int(max(3, np.random.normal(loc=6, scale=4)))
+        # Bevásárló utakat generálunk
+        trip_start = random.randrange(0, 86400)
         for trip in range(trip_len):
             trans_stamp = (simualtion_stamp +
-                           random.randrange(0, 86400) +
-                           trip * trip_delta * 60 )
-            trans_list.append(get_random_trans(cardNumber=card.index[randind],
-                                               cardType=card.iloc[randind]['Type'],
-                                               trans_date=trans_stamp))
+                           trip_start +
+                           trip * trip_delta * 60)
+            feature_flag = None
+            if is_model:
+                feature_flag = 1 if ((trip == int(trip_len / 2)) &
+                                     (isCandidate == 1)) else 0
+            trans = get_random_trans(cardNumber=card.index[randind],
+                                     cardType=card.iloc[randind]['Type'],
+                                     trans_date=trans_stamp,
+                                     feature_flag=feature_flag)
+            trans_list.append(trans)
+
+    # Ismeretlen kártyás tranzakciók
+    if is_model:
+        feature_flag = 0
+    else:
+        feature_flag = None
+    for j in range(nr_unknown):
+        trans_stamp = simualtion_stamp + random.randrange(0, 86400)
+        trans = get_random_trans(cardNumber=generate_random_cardnr(),
+                                 cardType=rand_list(account_types),
+                                 trans_date=trans_stamp,
+                                 feature_flag=feature_flag)
+        trans_list.append(trans)
     # DataFrame, rendezés
-    for i in range(nr_unknown):
-        trans_stamp = (simualtion_stamp +
-                       random.randrange(0, 86400))
-        trans_list.append(get_random_trans(cardNumber=generate_random_cardnr(),
-                                           cardType=account_types[random.randint(0, len(account_types)-1)],
-                                           trans_date=trans_stamp))
-    trans_df = (pd.DataFrame(trans_list)
-        [['accountNumber', 'accountType', 'merchantId', 'merchantType', 
-          'transactionId', 'amount', 'currency', 'isCardPresent',
-          'transactionTimeStamp']]
-        .sort_values('transactionTimeStamp'))
-    # trans_df.to_csv('transactions.csv')
-    trans_df.to_csv('transactions.csv',
-                    sep=';',
-                    header=False,
-                    index_label='idx',
-                    encoding='UTF-8',
-                    quoting=csv.QUOTE_ALL)
+    if is_model:
+        trans_df = (pd.DataFrame(trans_list)
+                    [['accountNumber', 'accountType', 'merchantId',
+                      'merchantType', 'transactionId', 'amount', 'currency',
+                      'isCardPresent', 'transactionTimeStamp', 'feature_1']]
+                    .sort_values('transactionTimeStamp'))
+        trans_df.to_csv(filename,
+                        sep=';',
+                        header=True,
+                        index_label='idx',
+                        encoding='UTF-8',
+                        quoting=csv.QUOTE_ALL)
+    else:
+        trans_df = (pd.DataFrame(trans_list)
+                    [['accountNumber', 'accountType', 'merchantId',
+                      'merchantType', 'transactionId', 'amount', 'currency',
+                      'isCardPresent', 'transactionTimeStamp']]
+                    .sort_values('transactionTimeStamp'))
+        trans_df.to_csv(filename,
+                        sep=';',
+                        header=False,
+                        index_label='idx',
+                        encoding='UTF-8',
+                        quoting=csv.QUOTE_ALL)
     return trans_df
 
-create_test_transactions(200,20)
+
+
+# Params
+simulation_start = "2018.04.01 08:00:00"
+epoch=dt.datetime.fromtimestamp(0)
+simualtion_stamp = (
+    dt.datetime.strptime(simulation_start.strip(),
+                         '%Y.%m.%d %H:%M:%S') - epoch).total_seconds()
+trip_delta = 5      # 5 percenként vásárol
+
+# Create Customers for Modeling
+cust_model_normal = create_test_customers(nr_of_cust=325,
+                                          cust_type='normal')
+cust_model_model1 = create_test_customers(nr_of_cust=75,
+                                          cust_type='model1')
+cust_model = cust_model_normal.copy().append(cust_model_model1)
+# Create Customers for simulation
+cust_simul_normal = create_test_customers(nr_of_cust=250,
+                                          cust_type='normal')
+cust_simul_model1 = create_test_customers(nr_of_cust=50,
+                                          cust_type='model1')
+cust_simul = cust_simul_normal.copy().append(cust_simul_model1)
+# All customer
+cust_all = cust_model.copy().append(cust_simul)
+
+
+# Generates test cards
+card_model = create_test_card(cust_model, nr_cards_over_one=200)
+card_simul = create_test_card(cust_simul, nr_cards_over_one=200)
+# Create mercahnt df
+merch = generate_merchants_df()
+# Saves to MySQL
+write_static_db(cust_all, card_model.append(card_simul), merch)
+
+
+# Write CSV for csak azért, hogy legyen
+cust_model.to_csv('customer_model.csv')
+cust_simul.to_csv('customer_simul.csv')
+
+# Create transactions for the customers
+# Simulation data, no feature flag
+trans_simul = create_test_transactions(nr_trips=500,
+                                       nr_unknown=50,
+                                       cust=cust_simul,
+                                       card=card_simul,
+                                       is_model=False,
+                                       filename="transaction_simul.csv")
+# MOdel data, with feature flag
+trans_simul = create_test_transactions(nr_trips=500,
+                                       nr_unknown=50,
+                                       cust=cust_model,
+                                       card=card_model,
+                                       is_model=True,
+                                       filename="transaction_model.csv")

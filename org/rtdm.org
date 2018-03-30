@@ -244,7 +244,6 @@ Root: Kiskacsa123
 systemctl status mysql.service
 
 mysqladmin -p -u root version
-
 ** Create Db
 https://www.digitalocean.com/community/tutorials/how-to-create-a-new-user-and-grant-permissions-in-mysql
 
@@ -332,6 +331,8 @@ Nagyjából nincs...
 https://docs.microsoft.com/en-us/machine-learning-server/python-reference/microsoftml/rx-predict
 PMML
 https://marketplace.rapidminer.com/UpdateServer/faces/product_details.xhtml?productId=rmx_pmml
+** NiFI and Spark
+https://community.hortonworks.com/articles/171893/hdf-31-executing-apache-spark-via-executesparkinte-1.html
 * GIT
 ** MCH
  muszi@ns.macrohard.hu:/home/muszi/git/kurt.git
@@ -344,3 +345,84 @@ cd rtdm.git
 git push --mirror git@github.com:cogitoergoread/rtdm.git
 
 git clone  git@github.com:cogitoergoread/rtdm.git
+* HDF Install RTDM
+** Leállítás
+Nem szabad leállítani!
+
+A better way to go with the Sandbox VMs is to use the 
+"save the machine state" rather than power off from the VirtualBox 
+shutdown options. This acts more like a suspend/resume and will 
+preserve the Docker container.
+** HDF
+SSH : http://sandbox-hdf.hortonworks.com:4200
+Sandbox Web Shell Client 	http://ip-address:4200 	root/hadoop
+** Ambari
+http://sandbox-hdf.hortonworks.com:8080
+admin/admin
+
+Ambari Metrics
+grafana
+grafana/grafana
+** Python
+Python 2.7 van...
+
+yum install bzip2
+./Miniconda3-latest-Linux-x86_64.sh
+/var/local/miniconda
+
+export PATH=/var/local/miniconda/bin:$PATH
+
+conda install numpy pandas sqlalchemy
+pip install :
+wget https://bootstrap.pypa.io/get-pip.py
+
+python get-pip.py 
+
+pip install numpy pandas sklearn
+pip install sqlalchemy
+
+
+yum install python-devel mysql-devel
+yum install mysql-connector-python mysql-libs
+
+** MySQL
+*** MySQL van
+skip-grant-tables
+/etc/my.cnf
+
+service mysqld restart
+
+mysql -urootmysql
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'Kiskacsa123';
+
+UPDATE user SET Password=PASSWORD('redhat') where USER='root'; 
+FLUSH PRIVILEGES;
+
+
+CREATE USER 'rtdm'@'localhost' IDENTIFIED BY 'rtdm123Kecske';
+CREATE DATABASE rtdm CHARACTER SET utf8 COLLATE utf8_general_ci;
+GRANT ALL PRIVILEGES ON rtdm.* TO rtdm@localhost;
+FLUSH PRIVILEGES;
+
+mysql -u rtdm -p
+
+*** MySQL Passwd nem mux
+yum install mysql-server
+UPDATE user SET Password=PASSWORD('Kiskacsa123') where USER='root'; 
+FLUSH PRIVILEGES; 
+
+*** Streamline user
+"hortonworks1"
+**** Javaslatok
+    db.properties:
+      dataSource.password: "hortonworks1"
+      dataSource.url: "jdbc:mysql://localhost:3306/streamline"
+      dataSource.user: "streamline"
+
+      dataSource.password: "hortonworks1"
+      dataSource.url: "jdbc:mysql://localhost:3306/registry"
+      dataSource.user: "registry"
+      dataSourceClassName: "com.mysql.jdbc.jdbc2.optional.MysqlDataSource"
+    db.type: "mysql"
+ 
+** Email
