@@ -1,89 +1,84 @@
 # Real Time Decisioning Model
 
-# Install
-## Install NiFi
-A <https://nifi.apache.org/> lapon a Download alól le lehet tölteni.
-Tipikusan <https://www.apache.org/dyn/closer.lua?path=/nifi/1.5.0/nifi-1.5.0-bin.zip> fájl kell. Ki kell csomagolni.
+# HDF
+Be kell húzni Virtualbox alá a HDF imaget.
+Nem árt elnevezni a gépet sandbox-hdf.hortonworks.com névre (localhost),
+hogy jól érezze magát a sok installált SW.
 
-Én átkonfiguráltam, hogy a NiFi a 9090 porton fusson, mert ez egyezik a HortonWorks setuppal, és már megszoktam `vim /var/local/nifi/nifi-1.5.0/conf/nifi.properties`:
-```
-nifi.web.http.port=9090
-```
+## Kikapcsolás / bekapcsolás
+Nem szabad leállítani rendesen a gépet.
+Nekem többször volt, hogy nem indult el.
 
-Indítás:
+Helyette: 
+
+A better way to go with the Sandbox VMs is to use the 
+"save the machine state" rather than power off from the VirtualBox 
+shutdown options. This acts more like a suspend/resume and will 
+preserve the Docker container.
+
+## Elérés ssh-val
+
+A virtuális gépen fut egy host, azon egy docker guest.
+
+Host elérése:
 ``` sh
-cd /var/local/nifi/nifi-1.5.0/bin
-./nifi.sh start
-
+ssh root@sandbox-hdf.hortonworks.com -p 2122
 ```
-Windows esetén <https://nifi.apache.org/docs/nifi-docs/html/getting-started.html#for-windows-users>:
 
-Kis idő elteltével a böngészőben rá lehet lépni: <http://localhost:9090/nifi>.
-
-
+Tényleges HDF gép elérése:
 ``` sh
-cd c:\NiFi\bin
-run-nifi.bat
+ssh root@sandbox-hdf.hortonworks.com -p 2222
 ```
 
-## Install MySQL
-A <https://dev.mysql.com/downloads/mysql/> lapról ki kell választani, Windows, ha jól látom, felrakja magát.
+(pass: hadoop)
 
-### MySQL teszt adatbázis
-Én ennek alapján csináltam: <https://www.digitalocean.com/community/tutorials/how-to-create-a-new-user-and-grant-permissions-in-mysql>.
-
-Be kell lépni a shellbe: `mysql -p -u root ` , kéri a jelszót, amit install alatt beállítottál.
-
-Adatbázis létrehozása:
+Érdemes publikus kulcsot felmásolni:
 ``` sh
-CREATE USER 'rtdm'@'localhost' IDENTIFIED BY 'rtdm123Kecske';
-CREATE DATABASE rtdm CHARACTER SET utf8 COLLATE utf8_general_ci;
-GRANT ALL PRIVILEGES ON rtdm.* TO rtdm@localhost;
-FLUSH PRIVILEGES;
+ssh-copy-id  root@sandbox-hdf.hortonworks.com -p 2122
 ```
+## Idő beállítás
 
-Nyilván megadhatsz más jelszót, usert, ízlés szerint.
-
-## Install Python
-A <https://www.python.org/downloads/windows/> lapról érdemes.
-
-## Alternatíva: Conda
-Az Anaconda egy Data Science keretrendszer. Érdemes lehet felrakni.
-Bele van csomagolva egy csomó okosság, pl Python, Spyder.
-Innen érdemes: <https://conda.io/docs/user-guide/install/windows.html>
-
-
+Ébresztés után elmászik a host órája. Állítani kell:
+``` sh
+ntpdate time.kfki.hu
+```
 # Teszt adat generálás
-Python kell hozzá.
 
-A python/test_dta_gen.py fájlt kell Python alatt futtatni.
-Kell hozzá pár import, azokat fel kell rakni:
+## Git repo
+
+Kihoztam a git repot a HDF gépen a /var/local/rtdm alá.
+
+Időről időre lehet mondani szinkronizálást:
+
 ``` sh
-pip install pandas numpy mysql-python
-# vagy Anacondánál
-conda install fentebbiek
+cd /var/local/rtdm
+git pull
 ```
-A def `write_static_db(cust, card):` függvényben be kell állítani a JDBC URL-t, arra a teszt adatbázisra, amelyet létrehoztunk:
+## Teszt adat paraméterek
+/var/local/rtdm/python/param_dicts.py fájlban vannak.
 
-``` python
-db_connection = 'mysql+mysqlconnector://rtdm:rtdm123Kecske@localhost:3306/rtdm'
-```
+Nagyrészt hasraütésre vettem fel a kategóriákat.
+
+ToDo : nézzük át, reálisak-e.
+
+## Teszt adat generálás
 
 Ezek után lehet futtatni:
 ``` sh
+cd /var/local/rtdm/python
 python -i python\test_dta_gen.py
 
 ```
 ## Teszt adat eredmények
-Jó eséllyel legyárt 3 CSV fájlt:
+Jó eséllyel legyárt egy halom CSV fájlt:
 
-  * customer.csv - Ügyfeleink
+  * customer_model.csv - Ügyfeleink, modellezéshez
+  * customer_simul.csv - Ügyfelek majd a NiFI szimulációhoz
   * cards.csv - Bank kártyák az ügyfelekhez
-  * transactions.csv - Bank kártyához tartozó tranzakciók
+  * transaction_model.csv / transaction_model.csv - Bank kártyához tartozó tranzakciók
   * merchant.csv - Kereskedő adatok
 
 Valamint MySQL alatt lesznek adatok `mysql -p -u rtdm`:
-(Gondolom, Windows alatt is van valami konzol. Ha nagyon nincs, akor MySQLWorkbench programot installáld.)
 
 ``` {sql}
 use rtdm
@@ -94,27 +89,31 @@ select * from merchant limit 10;
 
 # NiFi modell
 
-## NiFi, CSV_Ert_Mux.xml 
+## NiFi
+Ha jól van elnevezve a gép, akkor:
 
-Ez felolvasgatja a fájlt, és rekordokra vágja, első működő csodám!
+http://sandbox-hdf.hortonworks.com:9090/nifi/
+
+Én Benn hagytam a modellt.
 
 ### Előkészületek
 
 Kell két alkönyvtár, ahova a nifi dolgozik. 
- * /opt/u01/gwork/rtdm/nifi/data - innen veszi a fájlt, amit feldolgoz
- * /opt/u01/gwork/rtdm/nifi/output - ide rakja amit kiirkál
+ * /var/local/rtdm/nifi/data - innen veszi a fájlt, amit feldolgoz
+ * /var/local/rtdm/nifi/output - ide rakja amit kiirkál
 
 Indítás előtt érdemes kidobni az output tartalmát:
 ``` sh
-rm -f /opt/u01/gwork/rtdm/nifi/output/*
+rm -f /var/local/rtdm/nifi/output/*
 ```
 
-És kell adni pár rekordot neki, mondjuk az első 10 tranzakciót:
+És kell adni minta fájlt neki:
 ``` sh
-cat /opt/u01/gwork/rtdm/python/transactions.csv | head > /opt/u01/gwork/rtdm/nifi/data/transactions.csv
+cp /var/local/rtdm/nifi/work/transaction_simul.csv /var/local/rtdm/nifi/data/transactions.csv
 ```
 
 ### NiFi alatt, model betöltés
+Most épp be van töltve, de így hagytam a leírást.
 
 Fel kell tölteni a templatet. "Operate" részben első sor, utolsó ikon "Upload Template". Töltsd fel a nifi/CSV_Ert_Mux.xml fájlt.
 
@@ -126,6 +125,8 @@ Lett elvileg egy szép CsvRead ProcessGroup. Öröm.
 
 
 ### Nifi model editálás
+
+Ezeket is végigcsináltam, már nem kell.
 
 CsvRead ProcessGroupon duplakatt, ezáltal belépsz a groupba, bal alsó sarok mutatja: NiFi Flow >> CsvRead
 
@@ -147,29 +148,40 @@ Előtte kell egy adag teszt fájl, lásd "Előkészületek".
   * Operate Stop gomb (biztos, ami biztos)
   * Operate Start gomb
 
-## NiFi, SimulateBankCard.xml
+# Model építés
 
-Arra szolgál, hogy kártyás tranzakciókat szimuláljunk, és hozzá rakjuk a banki adatokat.
-Most, hogy gndolkodom rajta, a fájl feldolgozást és flow controlt ki  kellene venni külön modulba, ha egyszer is akarunk HTTP bementetet.
-No majd egyszer.
+A /var/local/rtdm/python/model_simul.csv fájl adataira kell modellt építeni.
 
-### NiFi
+``` sh
+head -n 2 /var/local/rtdm/python/model_simul.csv 
+,TransactionTrend,Account,FamilyMembers,Gender,long,Name,AvgMonthlySpending,merchantId,CreditScore,merchantType,Age,lat,amount,BalanceAmount,PreviousDaySpending,accountType,CreditLimit,accountNumber,transactionId,IncomeCategory,name,NrOfDebCards,Tel,CrmSegment,ShortTermCredit,NrOfCredCards,feature_1
+1315,Inact,230010996,1,F,19.0488859,Bálint Márton,394455,1082,S,utazás,70,47.49721,69069,731653,254158,MASTERCARD,1120000,2871 7229 4142 6115,5382377001,M,Neckermann Vörö,3,3680472249,Pension,Y,1,0.0
+```
 
-SimulateBankCard.xml fájl felvenni template ként.
-Lásd előző részben.
-Ugyanazokat a dobozokat kell editálni, GetFile, PutFile.
-Kell hozzá a MySQL teszt adat is, lásd teszt adatok rész.
+A feature_1 a cél változó. 0, ha nincs limit emelés, 1, ha van.
 
-Magában kiirkálja a flow fájlokat. Output portját kötni kell valami értelmeshez.
+A normál ügyfelek tulajdonságai:
+```{python}
+	cred_score = rand_list(crdtscore_list[:3])
+        nr_of_cred_card = random.randint(0, 1)
+        bal_amount = random.randint(int((avg_mon_spen / 3) *
+                                    (1.1 + random.random())),
+                                    768576)
+```
 
-### ExecuteSQL MySQL beállítás
-  * NiFi FLow >> SimualteBankCardTransactions
-  * ExecuteSQL process
-  * Properties, 'Database Connection Pooling Service', kis nyilacska a végén
-  * Ez átdob a COntroller Services' lapra, ott DBCPConnectionPool, fogaskerék
-  * Ki kell tölteni az alábbi Propertyket
-    * Database Connection URL: jdbc:mysql://localhost:3306/rtdm (Win alatt is lyesmi)
-	* Database Driver Class Name: com.mysql.jdbc.Driver
-	* Database Driver Location: file:///usr/share/java/mysql.jar (ahol van a MySQL Jar fájl, MySQL install során elvileg lett ilyen fájl)
-	* Database User: MySQL részből
-	* Password: mint előző
+Azaz a credit score rosszabb, kevesebb a hitelkártyája, de nagyobb az egyenlege, mint a havi /3.
+
+A limit emeléses ügyfelek tulajdonságai:
+```{python}
+        # Set values for Model Customer, model1
+        # - Hitelkártya fõkártya db >= 1
+        # - Hitel előminősített <> 0
+        # - egyenleg összeg (decimal), < Átlagos havi költés /3
+        cred_score = rand_list(crdtscore_list[3:])
+        nr_of_cred_card = random.randint(1, 3)
+        bal_amount = random.randint(314, int(avg_mon_spen / 3))
+        cc = 1
+```
+
+Azaz a Crdit score nagyobb, kártyaszám nagyobb, egyenlege kisebb.
+
