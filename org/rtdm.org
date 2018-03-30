@@ -142,17 +142,23 @@ where bank_card.Card = '6796 8296 4350 6601';
 select 
   customer.Account, customer.Age, customer.Gender,
   customer.Name, customer.Tel,
+  customer.BalanceAmount, customer.CrmSegment,
+  customer.ShortTermCredit, customer.FamilyMembers,
+  customer.TransactionTrend, customer.IncomeCategory,
+  customer.NrOfDebCards, customer.NrOfCredCards,
+  customer.CreditScore, customer.AvgMonthlySpending,
+  customer.CreditLimit, customer.PreviousDaySpending,
   merchant.name, merchant.lat, merchant.long
 from bank_card 
 left join customer 
  on ( customer.Account  = bank_card.Account )
 join merchant
-where bank_card.Card = '6796 8296 4350 6601'
+where bank_card.Card = '0001 1456 3397 1576'
   and merchant.id = 1001;
 
 '${accountNumber}'
 ${merchantId}
-
+**** Bővebb adatkör
 *** AVRO to JSON
 Nem kell séma, ha az AVRO fájlban van...
 {"type":"record",
