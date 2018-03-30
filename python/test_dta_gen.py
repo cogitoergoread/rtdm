@@ -403,9 +403,37 @@ trans_simul = create_test_transactions(nr_trips=500,
                                        is_model=False,
                                        filename="transaction_simul.csv")
 # MOdel data, with feature flag
-trans_simul = create_test_transactions(nr_trips=500,
+trans_model = create_test_transactions(nr_trips=500,
                                        nr_unknown=50,
                                        cust=cust_model,
                                        card=card_model,
                                        is_model=True,
                                        filename="transaction_model.csv")
+
+# Modellezéshez a teljes adatsetet előállítja
+# Tranzakció + Kártya, Account miatt
+df_model = trans_model.copy().merge(card_model,
+                           how='inner',
+                           left_on='accountNumber',
+                           right_index=True)
+# Eddigiek + Customer
+df_model = df_model.merge(cust_model,
+                          how='inner',
+                          left_on='Account',
+                          right_index=True)
+# + Merchant
+df_model = df_model.merge(merch,
+                          how='inner',
+                          left_on='merchantId',
+                          right_index=True)
+# Csak azok az oszlopok kellenek, amelyek megvannak a NiFiben is + feature_1
+df_model = df_model[["TransactionTrend", "Account", "FamilyMembers", "Gender",
+                     "long", "Name", "AvgMonthlySpending", "merchantId",
+                     "CreditScore", "merchantType", "Age", "lat", "amount",
+                     "BalanceAmount", "PreviousDaySpending", "accountType",
+                     "CreditLimit", "accountNumber", "transactionId",
+                     "IncomeCategory", "name", "NrOfDebCards", "Tel",
+                     "CrmSegment", "ShortTermCredit", "NrOfCredCards",
+                     "feature_1"]]
+
+df_model.to_csv('model_simul.csv')
