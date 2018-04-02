@@ -187,6 +187,44 @@ $.[0].long
 accountNumber,accountType,merchantId,merchantType,transactionId,amount
 Account,Age,Gender,Name,Tel,name,lat,long
 
+*** ExecuteStreamCommand
+[[https://stackoverflow.com/questions/49467969/python-script-using-executestreamcommand][Stack Paraméterezés]]
+[[https://nifi.apache.org/docs/nifi-docs/components/org.apache.nifi/nifi-standard-nar/1.5.0/org.apache.nifi.processors.standard.ExecuteStreamCommand/index.html][NiFi Doc]]
+STDIN-t olvasunk, STDOUT írunk.
+*** ExecuteScript {Python}
+Ez nem lesz jó.... Mivel Jython, és íg nincs benne scikit...
+[[https://community.hortonworks.com/articles/35568/python-script-in-nifi.html][Source]]
+ScriptEngine: python
+ScriptBody:
+ 
+```{Python}
+import json
+import java.io
+from org.apache.commons.io import IOUtils
+from java.nio.charset import StandardCharsets
+from org.apache.nifi.processor.io import StreamCallback
+ 
+class ModJSON(StreamCallback):
+  def __init__(self):
+        pass
+  def process(self, inputStream, outputStream):
+    text = IOUtils.toString(inputStream, StandardCharsets.UTF_8)
+    obj = json.loads(text)
+    newObj = {
+          "Source": "NiFi",
+          "ID": obj['id'],
+          "Name": obj['user']['screen_name']
+        }
+    outputStream.write(bytearray(json.dumps(newObj, indent=4).encode('utf-8')))
+ 
+flowFile = session.get()
+if (flowFile != None):
+  flowFile = session.write(flowFile, ModJSON())
+  flowFile = session.putAttribute(flowFile, "filename", flowFile.getAttribute('filename').split('.')[0]+'_translated.json')
+session.transfer(flowFile, REL_SUCCESS)
+session.commit()
+```
+
 * Doksik
 ** CSV to JSON
 Első cikk: https://community.hortonworks.com/articles/115311/convert-csv-to-json-avro-xml-using-convertrecord-p.html
