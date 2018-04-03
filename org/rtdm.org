@@ -191,6 +191,23 @@ Account,Age,Gender,Name,Tel,name,lat,long
 [[https://stackoverflow.com/questions/49467969/python-script-using-executestreamcommand][Stack Paraméterezés]]
 [[https://nifi.apache.org/docs/nifi-docs/components/org.apache.nifi/nifi-standard-nar/1.5.0/org.apache.nifi.processors.standard.ExecuteStreamCommand/index.html][NiFi Doc]]
 STDIN-t olvasunk, STDOUT írunk.
+Lett egy példa: 
+
+${sendTravelInsurance:equals(true)}
+*** Update Attributes: Email Properties
+```NiFi
+emailBody: ${Name:prepend("Kedves "):append(
+   "!\n Kössön Utasbiztosítást! \n Kürtovics Amarilla")
+}
+filename: email-insurance-${uuid}.json
+```
+*** RouteOnAttribute
+Elágazunk valami attr alapján.
+```{NiFi}
+sendTravelInsurance: ${sendTravelInsurance:equals(true)}
+```
+
+
 *** ExecuteScript {Python}
 Ez nem lesz jó.... Mivel Jython, és íg nincs benne scikit...
 [[https://community.hortonworks.com/articles/35568/python-script-in-nifi.html][Source]]
@@ -470,3 +487,8 @@ FLUSH PRIVILEGES;
     db.type: "mysql"
  
 ** Email
+** Synch óta
+*** Postfix
+yum install vim
+yum install mailx
+yum install postfix
