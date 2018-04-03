@@ -51,4 +51,4 @@ joblib.dump(knn, 'model_estimator_test.pkl')
 # Perzisztált model visszatöltése
 clf = joblib.load('model_estimator_test.pkl')
 print("Predict 320:{}, 768000:{}".format(clf.predict(320), 
-      clf.predict(7680000)))
+      clf.predict(7680000))) 
