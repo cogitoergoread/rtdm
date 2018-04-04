@@ -155,10 +155,11 @@ Lényeg a ExecuteStreamCommand processor.
 
 ### Előkészületek
 
-A betanított, elmentett modelt és a hozzá tartozó Python wrappert át kell másolni a nifi/model alkönyvtárba:
+A betanított, elmentett modelt és a hozzá tartozó Python wrappert át kell másolni a nifi/model alkönyvtárba, a py fájlt futtathatóvá tenni:
 ```{Python}
 cp python/ex_str_proc_demo.py nifi/model/
 cp python/model_estimator_test.pkl nifi/model/
+chmod +x nifi/model/ex_str_proc_demo.py
 ```
 ### 
 
@@ -211,3 +212,4 @@ A modelt majd le kell futtatni a Hortonworks Sandboxban is, ott 2.7 Python van, 
 
 Megoldás lehet a `, protocol=2)` használata. Nem ellenőriztem.
 [StacOverflow](https://stackoverflow.com/questions/25843698/valueerror-unsupported-pickle-protocol-3-python2-pickle-can-not-load-the-file)
+

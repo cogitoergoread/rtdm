@@ -194,6 +194,10 @@ STDIN-t olvasunk, STDOUT írunk.
 Lett egy példa: 
 
 ${sendTravelInsurance:equals(true)}
+
+Az lett a megoldás, hogy közvetlenül a py fájlt kell hívni.
+Exec jog rá.
+
 *** Update Attributes: Email Properties
 ```NiFi
 emailBody: ${Name:prepend("Kedves "):append(
@@ -207,6 +211,7 @@ Elágazunk valami attr alapján.
 sendTravelInsurance: ${sendTravelInsurance:equals(true)}
 ```
 
+Valamiért az egyenlőség vizsgálat nem volt jó, gt(0) igen.
 
 *** ExecuteScript {Python}
 Ez nem lesz jó.... Mivel Jython, és íg nincs benne scikit...
