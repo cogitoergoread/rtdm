@@ -148,6 +148,20 @@ Előtte kell egy adag teszt fájl, lásd "Előkészületek".
   * Operate Stop gomb (biztos, ami biztos)
   * Operate Start gomb
 
+## NiFi Python ML model kiértékelés
+
+A ProcessGroup-ba kell belépni.
+Lényeg a ExecuteStreamCommand processor.
+
+### Előkészületek
+
+A betanított, elmentett modelt és a hozzá tartozó Python wrappert át kell másolni a nifi/model alkönyvtárba:
+```{Python}
+cp python/ex_str_proc_demo.py nifi/model/
+cp python/model_estimator_test.pkl nifi/model/
+```
+### 
+
 # Model építés
 
 A /var/local/rtdm/python/model_simul.csv fájl adataira kell modellt építeni.
@@ -185,3 +199,15 @@ A limit emeléses ügyfelek tulajdonságai:
 
 Azaz a Crdit score nagyobb, kártyaszám nagyobb, egyenlege kisebb.
 
+## Teszt model - model elmentése
+A 'python/clf_test.py' fájlban egy preimitív kNN model található.
+Helyben generált teszt adatokon tanul, és prediktál.
+
+Az a szép benne, hogy a modelt tanulás után fájlba mentjük.
+
+A 'python/ex_str_proc_demo.py' fájlban van az elmentett modelt felhasználó NiFi ExecuteStreamCommand processor által hívható kiértékelő.
+
+A modelt majd le kell futtatni a Hortonworks Sandboxban is, ott 2.7 Python van, és a Python 3 által elmentett modelt nem akarja olvasni.
+
+Megoldás lehet a `, protocol=2)` használata. Nem ellenőriztem.
+[StacOverflow](https://stackoverflow.com/questions/25843698/valueerror-unsupported-pickle-protocol-3-python2-pickle-can-not-load-the-file)
