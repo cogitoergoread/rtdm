@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Created on Mon Apr  2 19:38:40 2018
@@ -36,6 +36,10 @@ try:
 except:
     predicted = 0
     logging.debug('predict Exception')
+
+# Simple print
+print(predicted)
+exit(0)
 
 # Add a new JSON field as a predicted value
 data_rec[u'feature_1'] = u'{}'.format(predicted)
