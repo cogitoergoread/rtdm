@@ -492,6 +492,23 @@ FLUSH PRIVILEGES;
     db.type: "mysql"
  
 ** Email
+GMAIL
+Kimenő levelek szervere (SMTP) 	
+
+smtp.gmail.com
+
+SSL-alapú titkosítást igényel: igen
+
+TLS-titkosítás igényel: igen (ha rendelkezésre áll)
+
+Hitelesítést igényel: igen
+
+SSL-port: 465
+
+TLS-/STARTTLS-port: 587
+Teljes név vagy megjelenítendő név 	Az Ön neve
+Fiók neve, felhasználónév vagy e-mail-cím 	herendi4096vaza@gmail.com
+Jelszó  RCEacclqPhDnuk
 ** Synch óta
 *** Postfix
 yum install vim
