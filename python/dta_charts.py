@@ -28,7 +28,7 @@ df['CreditScore'] = (pd.Categorical(df['CreditScore'],
                                     ordered=True)
                     .codes)
 # BalDiff = AvgMonthlySpending - BalanceAmount
-df['BalDiff'] = df['AvgMonthlySpending'] - df['aBalanceAmount']
+df['BalDiff'] = df['BalanceAmount'] - (df['AvgMonthlySpending'] / 3)
 # Feature_1 visszaállítása
 df['feature_1'] = 0
 df.loc[df['CreditScore']>2, "feature_1"] = 1
