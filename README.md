@@ -1,5 +1,29 @@
 # Real Time Decisioning Model
 
+# Virtualbox image
+
+muszi user van, jelszava nifi1024
+
+Bridged network, remélhetőleg kap nálatom DHCP címet.
+Settings, networks alatt esetleg editálni kell, mert most enps0 eszözre bindol.
+
+Mondjuk állítsd be, hogy a host neve nifi-host
+
+Másolj fel egy ssh kulcsot, ssh-copy-id, és ssh -A muszi@nifi-host
+
+Nifi indítása:
+```{sh}
+/var/local/nifi-1.6.0/bin/nifi.sh start
+```
+
+Nifi leállítás:
+
+```{sh}
+/var/local/nifi-1.6.0/bin/nifi.sh stop
+```
+
+Nekem futott a modell, úgy ahogy van.
+
 # HDF
 Be kell húzni Virtualbox alá a HDF imaget.
 Nem árt elnevezni a gépet sandbox-hdf.hortonworks.com névre (localhost),

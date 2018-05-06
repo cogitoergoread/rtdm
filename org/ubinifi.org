@@ -1,0 +1,76 @@
+* Ubuntu install
+** MySQL
+[[https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04][Leírás]]
+
+Root: Kiskacsa123
+
+systemctl status mysql.service
+
+mysqladmin -p -u root version
+*** Create Db
+https://www.digitalocean.com/community/tutorials/how-to-create-a-new-user-and-grant-permissions-in-mysql
+
+mysql -p -u root 
+
+CREATE USER 'rtdm'@'localhost' IDENTIFIED BY 'rtdm123Kecske';
+CREATE DATABASE rtdm CHARACTER SET utf8 COLLATE utf8_general_ci;
+GRANT ALL PRIVILEGES ON rtdm.* TO rtdm@localhost;
+FLUSH PRIVILEGES;
+
+SELECT DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME
+FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'rtdm';
+
+** Python
+sudo apt install python3 python3-pip vim
+sudo apt install python3-sklearn python3-sklearn-pandas
+sudo apt install python3-sqlalchemy
+sudo apt install python3-mysql.connector
+sudo apt install libmysql-java
+** Java
+[[https://linuxconfig.org/how-to-install-java-on-ubuntu-18-04-bionic-beaver-linux][Doksi]]
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt update
+sudo apt install oracle-java8-set-default
+** NiFi
+  wget http://xenia.sote.hu/ftp/mirrors/www.apache.org/nifi/1.6.0/nifi-1.6.0-bin.tar.gz
+cd /var/local
+tar xvfz /tmp/nifi-1.6.0-bin.tar.gz 
+sudo chown -R muszi.muszi nifi-1.6.0/
+
+*** NiFi start
+/var/local/nifi-1.6.0/bin/nifi.sh start
+*** NiFi stop
+/var/local/nifi-1.6.0/bin/nifi.sh stop
+*** hosts, elérés
+/etc/hosts
+192.168.0.227	nifi-host
+
+http://nifi-host:8080/nifi
+
+* RTDM
+** Hely
+cd /var/local
+sudo mkdir rtdm
+sudo chown muszi.muszi rtdm
+cd /var/local/rtdm/
+
+** GIT
+ssh -A -X muszi@nifi-host
+cd /var/local/rtdm/
+git clone git@github.com:cogitoergoread/rtdm.git
+
+** Teszt adat generálás
+mkdir /var/local/rtdm/python-nifi-host/python-nifi-host
+cd /var/local/rtdm/python-nifi-host/python-nifi-host
+cp ../python/*.py ../python/*pkl 
+rm Model_simulate.py avro_test.py 
+
+python3 -i test_dta_gen.py
+
+** NiFI munka könyvtárak
+mkdir /var/local/rtdm/nifi/data /var/local/rtdm/nifi/output
+cp /var/local/rtdm/python-nifi-host/*.csv /var/local/rtdm/nifi/work/ 
+cp /var/local/rtdm/nifi/work/transaction_simul.csv /var/local/rtdm/nifi/data/transactions.csv
+
+mkdir /var/local/rtdm/nifi/model
+cp /var/local/rtdm/python-nifi-host/{ex_str_proc_demo.py,model_estimator_test.pkl} /var/local/rtdm/nifi/model/
