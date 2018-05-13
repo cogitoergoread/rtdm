@@ -74,3 +74,30 @@ cp /var/local/rtdm/nifi/work/transaction_simul.csv /var/local/rtdm/nifi/data/tra
 
 mkdir /var/local/rtdm/nifi/model
 cp /var/local/rtdm/python-nifi-host/{ex_str_proc_demo.py,model_estimator_test.pkl} /var/local/rtdm/nifi/model/
+* Film
+NiFi.mp4
+** Forgatókönyv
+Kb ezek kellenek:
+
+0:00 - 0:06, elindul
+0:15 - 0:19, első adag
+0:45 - 0:49, második adag
+0:55 - 0:59, zoom Simulate dobozra
+1:17 - 1:20, újabb adag
+1:22 - 1:27, Zoom Enrichre
+1:45 - 1:50, újabb adag
+2:03 - 2:09, Zoom recommend
+2:45 - 2:48, újabb adag
+2:54 - 2:59, Zoom Evaluate
+3:15 - 3:18, újabb adag
+3:50 - 3:56, Zoom Send Reco
+4:48 - 4:52, adag
+4:55 - 5:00, stop
+5:07 - 5:09, Gmail indul
+5:40 - 5:44, emailek
+
+** Zene
+https://www.youtube.com/watch?v=L6zR7qJ9frA
+
+Van MP3.
+'/home/muszi/Downloads/Pipeline - The Chantays 1962.mp3'
